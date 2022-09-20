@@ -11,7 +11,7 @@ The two players will each start in an opposite corner of the board.
 
 In turn, each player will advance in the chessboard and take a square. Be careful, a player will not be able to cross an opponent's square.
 If a part of the chessboard is no longer accessible by the opponent, he will take the player's color.
-The game ends when each square of the board is taken.
+    The game ends when each square of the board is taken.
 
 > 
 
