@@ -1,3 +1,3 @@
-# Projet : création d'une intelligence artificielle 
+# Territory : artificial intelligence creation's
 
 DE BUCK Henry & SOMME Aurélien 🤞🏻
