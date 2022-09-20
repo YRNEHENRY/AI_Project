@@ -1,3 +1,3 @@
 # Territory : artificial intelligence creation's
 
-DE BUCK Henry & SOMME Aurélien 👨🏼‍💻👨🏻‍💻
+DE BUCK Henry 👨🏼‍💻 & SOMME Aurélien 👨🏻‍💻
