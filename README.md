@@ -9,6 +9,8 @@ In turn, each player will advance in the chessboard and take a square. Be carefu
 If a part of the chessboard is no longer accessible by the opponent, he will take the player's color.
 The game ends when each square of the board is taken.
 
+> Of course your opponent will be our AI 🙃
+
 ## About us
 We're two computer sciences students and this project is our exam.
 
