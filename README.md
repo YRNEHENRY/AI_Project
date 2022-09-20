@@ -3,7 +3,7 @@
 ## Rules
 The rule is simple, the game takes place in a chessboard of size X that you can choose at the beginning of the game.
 
-<img= " https://gyazo.com/ef1d61ce15d5a6bc3cb54f58662855f5 " >
+![Octocat](https://user-images.githubusercontent.com/81953271/124010886-b571ca80-d9df-11eb-86ac-b358c48ac6aa.png "Github logo") 
 
 The two players will each start in an opposite corner of the board.
 
