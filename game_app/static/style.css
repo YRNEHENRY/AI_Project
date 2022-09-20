@@ -1,0 +1,32 @@
+nav, main, p, footer{font-family:sans-serif;}
+
+nav{color:white;
+    background-color: black;}
+
+nav{width: auto;
+    padding: 13px;
+    display: flex;
+    position: sticky;
+    
+    
+}
+
+#navButtons{
+    flex-grow: 1;
+}
+
+#navName{
+    flex-grow: 1;
+    text-align: center;
+}
+
+#navProfile{
+    flex-grow: 1;
+    text-align: right;
+}
+
+
+
+body{
+    margin: 0;
+}
