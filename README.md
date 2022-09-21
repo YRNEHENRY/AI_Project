@@ -7,9 +7,9 @@
 ## Rules
 The rule is simple, the game takes place in a chessboard of size X that you can choose at the beginning of the game.
 
-<img src="https://github.com/YRNEHENRY/AI_Project/blob/main/assets/Screenshot%202022-09-20%20at%205.41.02%20PM.png" width="385px">
+<img src="https://github.com/YRNEHENRY/AI_Project/blob/main/assets/Screenshot%202022-09-20%20at%205.41.02%20PM.png" width="385px" align ="left">
 
-<img src="https://github.com/YRNEHENRY/AI_Project/blob/main/assets/Screenshot%202022-09-20%20at%205.48.22%20PM.png" width="385px">
+<img src="https://github.com/YRNEHENRY/AI_Project/blob/main/assets/Screenshot%202022-09-20%20at%205.48.22%20PM.png" width="385px" align ="right">
 
 The two players will each start in an opposite corner of the board.
 
