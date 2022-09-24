@@ -1,0 +1,62 @@
+body{background-color: rgb(0, 0, 0);}
+
+nav, main, p, footer{font-family:sans-serif;}
+
+nav, footer{color:white;
+    background-color: rgb(14, 27, 49);}
+
+nav{width: auto;
+    padding: 13px;
+    display: flex;
+    position: sticky;
+}
+
+footer{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    padding-top:15px;
+    padding-bottom: 25px;
+    height:20px;
+    font-size: x-small;
+    display: flex;
+}
+
+footer > div{
+    flex-grow: 1;
+    
+}
+
+#div1Footer{
+    padding-left: 10px;
+}
+
+footer a{
+    color:white;
+    text-decoration: none;
+}
+
+#div3Footer > p, #div4Footer > p{
+    margin-top: 0px;
+    margin-bottom: 1px;
+}
+
+#navButtons{
+    flex-grow: 1;
+}
+
+#navName{
+    flex-grow: 1;
+    text-align: center;
+}
+
+#navProfile{
+    flex-grow: 1;
+    text-align: right;
+}
+
+
+
+body{
+    margin: 0;
+}
