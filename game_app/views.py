@@ -5,4 +5,6 @@ app.config.from_object('config')
 
 @app.route('/')
 def index():
-    return render_template('base.html')
+    nb = 4
+    size = nb * nb
+    return render_template('index.html')

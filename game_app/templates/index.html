@@ -1,7 +1,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<p>?</p>
+
+<div class="mainDiv">
+
+    <table class="grid">
+    {%for i in range(0, 5)%}
+        <tr class="rowX{{i+1}}"></div>
+        {%for y in range(0, 5)%}
+            <th class="itemY{{y+1}}"></th>
+        {% endfor %}
+        
+    {% endfor %}
+    </div>
+
+</div>
+
+
+<div id="rulesDiv">
+
+</div>
 
 {% endblock %}
 
