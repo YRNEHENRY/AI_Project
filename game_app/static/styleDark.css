@@ -6,6 +6,12 @@ table{
     margin: 20px;
 }
 
+#rulesDiv{
+    margin: 20px;
+    color: white;
+}
+
+
 th{
     padding: 30px;
     border: solid 2px white;

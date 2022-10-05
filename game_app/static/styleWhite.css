@@ -1,5 +1,13 @@
 nav, main, p, footer{font-family:sans-serif;}
 
+h1{
+    font-family: sans-serif;
+}
+
+#rulesDiv{
+    margin: 20px;
+}
+
 table{
     border-spacing:0;
     border-collapse: collapse;
