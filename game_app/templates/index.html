@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="mainDiv">
+
+    <table class="grid">
+    {%for i in range(0, 5)%}
+        <tr class="rowX{{i+1}}"></div>
+        {%for y in range(0, 5)%}
+            <th class="itemY{{y+1}}"></th>
+        {% endfor %}
+        
+    {% endfor %}
+    </div>
+
+</div>
+
+
+<div id="rulesDiv">
+    <div>
+        <h1>Rules</h1>
+        <div><p>Know about the game</p></div>
+    </div>
+</div>
+
+{% endblock %}
+

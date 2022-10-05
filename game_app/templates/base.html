@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/styleWhite.css">
+    <title>Home</title>
+    <script src="../static/jsBase.js"></script>
+</head>
+<body>
+    <nav>
+        <div id="navButtons">
+            <button>Jeu</button>
+            <button>Regle</button>
+            <button>Info</button>
+        </div>
+        <div id="navName">Territory</div>
+        <div id="navProfile">
+            <button onclick="changeStyleMode()">Mode jour/nuit</button>
+            <button>Profil</button>
+        </div>
+        
+    </nav>
+    
+    {% block content %}{% endblock %}
+
+    <footer>
+        <div id="div1Footer">
+            <a href="https://github.com/YRNEHENRY/AI_Project">Lien github</a><br>
+            <a href="https://github.com/YRNEHENRY/AI_Project/tree/draw_aurelien">Lien branche Aurélien</a><br>
+            <a href="https://github.com/YRNEHENRY/AI_Project/tree/draw_henry">Lien branche Henry</a>
+        </div>
+        <div id="div2Footer">
+            <a href="https://portail.henallux.be/">Portail Henallux</a><br>
+        </div>
+        <div id="div3Footer">
+            <p>Python</p>
+            <p>SQL</p>
+            <p>Flask</p>
+        </div>
+        <div id="div4Footer">
+            <p>AI (artificial intelligence)</p>
+            <p>Jeu case</p>
+        </div>
+    </footer>
+    
+</body>
+</html>
