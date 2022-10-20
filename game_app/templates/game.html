@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="startGameDiv"><p>Commencer la partie</p></div>
+
+<div class="mainDiv">
+
+    <table class="grid" style=" margin-left: auto;margin-right: auto;width: 6em;margin-top:50px">
+    {%for i in range(0, 5)%}
+        <tr class="rowX{{i+1}}"></div>
+        {%for y in range(0, 5)%}
+            <th class="itemY{{y+1}}"></th>
+        {% endfor %}
+        
+    {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}

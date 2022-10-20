@@ -78,3 +78,17 @@ footer a{
 body{
     margin: 0;
 }
+
+
+#buttonDiv{
+    padding-left: 20px;
+}
+
+.startGameDiv{
+    border-radius: 10px;
+    padding: 5px;
+    width: 95px;
+    margin-left: 20px;
+    margin-top: 10px;
+    background-color: greenyellow;
+}
