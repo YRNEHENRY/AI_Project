@@ -8,3 +8,4 @@ function changeStyleMode(){
         isWhiteMode = !isWhiteMode
         document.children[0].children[0].children[3].href = tabLienActuel.join("/")
 }
+
