@@ -17,7 +17,7 @@ class Human (User):
     __tablename__ = "human"
     __table_args__ = (UniqueConstraint('login'))
 
-    login = db.Column(db.string(25), )
+    login = db.Column(db.string(25))
     password = db.Column(db.String(50))
     email = db.Column(db.String(50))
     name = db.Column(db.String(25))
@@ -53,7 +53,7 @@ class Board(db.Model):
         self.position_p1 = position_p1
         self.position_p2 = position_p2
 
-class Position_history:
+class Position_history(db.Model):
     __tablename__ = "position_history"
     def __init__(self) -> None:
         pass
