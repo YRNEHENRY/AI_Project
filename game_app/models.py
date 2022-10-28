@@ -12,12 +12,12 @@ class User(db.Model):
     __abstract__ = True
 
     id = db.Column(db.Integer, primary_key = True)
-    games = relationship("Board")
+    #games = relationship("Board")
 
 
 class Human (User):
     __tablename__ = "human"
-    __table_args__ = (UniqueConstraint('login'))
+    #__table_args__ = (UniqueConstraint('login'))
 
     login = db.Column(db.String(25), nullable = False)
     password = db.Column(db.String(50), nullable = False)
@@ -49,8 +49,8 @@ class Board(db.Model):
     position_p1 = db.Column(db.String(2), nullable = False)
     position_p2 = db.Column(db.String(2), nullable = False)
 
-    player1_id = Column(Integer, ForeignKey("user.id"))
-    player2_id = Column(Integer, ForeignKey("user.id"))
+    #player1_id = Column(Integer, ForeignKey("user.id"))
+    #player2_id = Column(Integer, ForeignKey("user.id"))
 
     def __init__(self, size, state_board, turn, position_p1, position_p2):
         self.size = size
