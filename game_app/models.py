@@ -15,16 +15,17 @@ class User(db.Model):
 
 class Human (User):
     __tablename__ = "human"
-    __table_args__ = (UniqueConstraint('login'))
+    #__table_args__ = (UniqueConstraint('login'))
 
-    login = db.Column(db.string(25))
+    login = db.Column(db.String(25))
     password = db.Column(db.String(50))
     email = db.Column(db.String(50))
     name = db.Column(db.String(25))
     first_name = db.Column(db.String(25))
 
-    def __init__(self, password, email, name, first_name):
-        #super().__init__()
+    def __init__(self, login, password, email, name, first_name):
+        super().__init__()
+        self.login = login
         self.password = password
         self.email = email
         self.name = name
@@ -53,7 +54,7 @@ class Board(db.Model):
         self.position_p1 = position_p1
         self.position_p2 = position_p2
 
-class Position_history(db.Model):
-    __tablename__ = "position_history"
-    def __init__(self) -> None:
-        pass
+#class Position_history(db.Model):
+#    __tablename__ = "position_history"
+#    def __init__(self) -> None:
+#        pass
