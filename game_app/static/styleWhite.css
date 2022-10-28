@@ -92,3 +92,16 @@ body{
     margin-top: 10px;
     background-color: greenyellow;
 }
+
+.icon_svg{
+    width: 25px;
+}
+
+.github_svg {
+    fill: white;
+    padding-right: 2em;
+}
+
+.github_svg:hover {
+    fill: lightgray;
+}
