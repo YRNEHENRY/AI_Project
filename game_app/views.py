@@ -8,6 +8,9 @@ from game_app.models import AI, Board, Human
 app = Flask(__name__)
 app.config.from_object('config')
 size = 4
+board = Board(size, [[2,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,1]], 1, [3,3], [0,0])
+player = Human("log1", "password1", "email1", "player1", "human_player1")
+ia = AI()
 
 @app.route('/')
 def index():
@@ -17,11 +20,10 @@ def index():
 def game():
     return render_template('game.html', size = size)
 
-@app.route('/game/start/')
+@app.route('/game/play/')
 def start():
-    player = Human("log1", "password1", "email1", "player1", "human_player1")
-    ia = AI()
-    board = Board(size, [[2,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,1]], 1, (3,3), (0,0))
+    print(board.state_board)
+    print("Joueur actuel : ", board.turn)
     return {"state_board" : board.state_board, "turn" : board.turn, "position_p1" : board.position_p1, "position_p2" : board.position_p2}
 
 
@@ -29,7 +31,17 @@ def start():
 def move():
     if flask.request.method == 'POST':
         move = request.args.get('move')
+        move = move.split(",")
+        move = list(map(int, move))
         print(move)
+        if board.turn == 1:
+            print("bonjour")
+            board.position_p1 = move
+        else:
+            print("yo")
+            board.position_p2 = move
+        board.update_state()
+        
     return {"move" : move}
 
 @app.route('/rules/')

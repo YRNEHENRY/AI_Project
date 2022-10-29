@@ -59,6 +59,18 @@ class Board(db.Model):
         self.position_p1 = position_p1
         self.position_p2 = position_p2
 
+    def update_state(self):
+
+        if self.turn == 1:
+            x = self.position_p1[0]
+            y = self.position_p1[1]
+        else:
+            x = self.position_p2[0]
+            y = self.position_p2[1]
+        print(x, "  ", y)
+        self.state_board[x][y] = 1 if self.turn == 1 else 2
+        self.turn = 2 if self.turn == 1 else 1
+
 #class Position_history(db.Model):
 #    __tablename__ = "position_history"
 #    def __init__(self) -> None:

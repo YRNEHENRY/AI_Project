@@ -14,14 +14,15 @@ let player_2 = {icon : "../Player_icon/spider.svg"}
 let state_board
 let turn
 
-function startGame(){
+function playGame(){
 
-        fetch('/game/start/').then(response => response.json()).then(function(data){
+        fetch('/game/play/').then(response => response.json()).then(function(data){
                 turn = data['turn']
                 state_board = data['state_board']
                 player_1.position = data['position_p1']
                 player_2.position = data['position_p2']
                 refreshGrid()
+                displayPossibleMove()
         })
         
 }
@@ -46,7 +47,8 @@ async function move(x, y){
         .catch((error) => {
           console.error('Error:', error);
         });
-        
+        turn = turn == 1 ? 2 : 1  
+        playGame()   
 }
 
 function displayPossibleMove(){
@@ -55,13 +57,18 @@ function displayPossibleMove(){
         let playerPosition = turn == 1 ? player_1.position : player_2.position
         let possibleMove = []
 
-        if((playerPosition[0] - 1) >= 0)
+        opponentPlayer = "player" + (turn == 1 ? 2 : 1)
+
+        if((playerPosition[0] - 1) >= 0 && table.children[playerPosition[0] - 1].children[playerPosition[1]].className != opponentPlayer)
                 possibleMove.push([(playerPosition[0] - 1), playerPosition[1]])
-        if((playerPosition[1] - 1 >= 0))
+
+        if((playerPosition[1] - 1 >= 0) && table.children[playerPosition[0]].children[playerPosition[1] - 1].className != opponentPlayer)
                 possibleMove.push([playerPosition[0], (playerPosition[1] - 1)])
-        if((playerPosition[0] + 1) <= 3)
+
+        if((playerPosition[0] + 1) <= 3 && table.children[playerPosition[0] + 1].children[playerPosition[1]].className != opponentPlayer)
                 possibleMove.push([(playerPosition[0] + 1), playerPosition[1]])
-        if((playerPosition[1] + 1 <= 3))
+
+        if((playerPosition[1] + 1 <= 3) && table.children[playerPosition[0]].children[playerPosition[1] + 1].className != opponentPlayer)
                 possibleMove.push([playerPosition[0], (playerPosition[1] + 1)])
 
         console.log(possibleMove)
