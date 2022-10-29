@@ -22,8 +22,6 @@ def game():
 
 @app.route('/game/play/')
 def start():
-    print(board.state_board)
-    print("Joueur actuel : ", board.turn)
     return {"state_board" : board.state_board, "turn" : board.turn, "position_p1" : board.position_p1, "position_p2" : board.position_p2}
 
 
@@ -33,12 +31,9 @@ def move():
         move = request.args.get('move')
         move = move.split(",")
         move = list(map(int, move))
-        print(move)
         if board.turn == 1:
-            print("bonjour")
             board.position_p1 = move
         else:
-            print("yo")
             board.position_p2 = move
         board.update_state()
         

@@ -67,7 +67,6 @@ class Board(db.Model):
         else:
             x = self.position_p2[0]
             y = self.position_p2[1]
-        print(x, "  ", y)
         self.state_board[x][y] = 1 if self.turn == 1 else 2
         self.turn = 2 if self.turn == 1 else 1
 
