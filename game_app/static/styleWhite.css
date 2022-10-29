@@ -93,15 +93,18 @@ body{
     background-color: greenyellow;
 }
 
+
+/* base css */
 .icon_svg{
     width: 25px;
+    height: 25px;
+    fill: white;
+}
+
+.icon_svg:hover{
+    fill: lightgray;
 }
 
 .github_svg {
-    fill: white;
     padding-right: 2em;
-}
-
-.github_svg:hover {
-    fill: lightgray;
 }

@@ -27,3 +27,10 @@ def start():
 def move():
     return {"test" : "bonjour"}
 
+@app.route('/rules/')
+def rules():
+    return render_template('rules.html')
+
+@app.route('/infos/')
+def infos():
+    return render_template('infos.html')
