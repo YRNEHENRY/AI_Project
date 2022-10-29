@@ -91,6 +91,10 @@ body{
     background-color: greenyellow;
 }
 
+.movable{
+    background-color: aqua;
+}
+
 
 /* base css */
 .icon_svg{

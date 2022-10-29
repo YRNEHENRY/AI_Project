@@ -19,12 +19,64 @@ function startGame(){
         fetch('/game/start/').then(response => response.json()).then(function(data){
                 turn = data['turn']
                 state_board = data['state_board']
-                player_1.position_p1 = data['position_p1']
-                player_2.position_p2 = data['position_p2']
+                player_1.position = data['position_p1']
+                player_2.position = data['position_p2']
                 refreshGrid()
         })
         
 }
+
+
+async function move(x, y){
+        let move = [x,y]
+        console.log(move)
+        url = '/game/move?move=' + move
+        console.log(url)
+        const reponse = await fetch(url, {
+                method: 'POST',
+                headers:{
+                        'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(move),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log('Success:', data);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+        
+}
+
+function displayPossibleMove(){
+        let table = document.getElementsByClassName("grid")[0].children[0]
+
+        let playerPosition = turn == 1 ? player_1.position : player_2.position
+        let possibleMove = []
+
+        if((playerPosition[0] - 1) >= 0)
+                possibleMove.push([(playerPosition[0] - 1), playerPosition[1]])
+        if((playerPosition[1] - 1 >= 0))
+                possibleMove.push([playerPosition[0], (playerPosition[1] - 1)])
+        if((playerPosition[0] + 1) <= 3)
+                possibleMove.push([(playerPosition[0] + 1), playerPosition[1]])
+        if((playerPosition[1] + 1 <= 3))
+                possibleMove.push([playerPosition[0], (playerPosition[1] + 1)])
+
+        console.log(possibleMove)
+
+        for(let i in possibleMove){
+                
+                table.children[possibleMove[i][0]].children[possibleMove[i][1]].className += " movable"
+                table.children[possibleMove[i][0]].children[possibleMove[i][1]].addEventListener("click", move.bind(null, possibleMove[i][0], possibleMove[i][1]))
+                
+        }
+        
+        
+   
+}
+
 
 function refreshGrid(){
         let table = document.getElementsByClassName("grid")[0].children[0]
@@ -32,6 +84,7 @@ function refreshGrid(){
         for(let i in state_board){
                 
                 for(let y in state_board[i]){
+                        table.children[i].children[y].replaceWith(table.children[i].children[y].cloneNode(true))
                         switch(state_board[i][y]){
                                 case 0 :table.children[i].children[y].innerHTML = ""
                                         table.children[i].children[y].className = "neutral"
@@ -46,8 +99,7 @@ function refreshGrid(){
                         table.children[i].children[y]
                 }
         }
-        table.children[player_1.position_p1[0]].children[player_1.position_p1[1]].innerHTML = "P1"
-        table.children[player_2.position_p2[0]].children[player_2.position_p2[1]].innerHTML = "P2"
+        table.children[player_1.position[0]].children[player_1.position[1]].innerHTML = "P1"
+        table.children[player_2.position[0]].children[player_2.position[1]].innerHTML = "P2"
 
 }
-

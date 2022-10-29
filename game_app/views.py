@@ -1,5 +1,7 @@
+
 from urllib import request
-from flask import Flask, render_template
+from flask import Flask, render_template, request
+import flask
 
 from game_app.models import AI, Board, Human
 
@@ -23,9 +25,12 @@ def start():
     return {"state_board" : board.state_board, "turn" : board.turn, "position_p1" : board.position_p1, "position_p2" : board.position_p2}
 
 
-@app.route('/game/move/')
+@app.route('/game/move', methods = ['GET', 'POST'])
 def move():
-    return {"test" : "bonjour"}
+    if flask.request.method == 'POST':
+        move = request.args.get('move')
+        print(move)
+    return {"move" : move}
 
 @app.route('/rules/')
 def rules():
@@ -34,3 +39,5 @@ def rules():
 @app.route('/infos/')
 def infos():
     return render_template('infos.html')
+
+
