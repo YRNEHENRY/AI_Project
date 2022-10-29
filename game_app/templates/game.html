@@ -2,19 +2,21 @@
 
 {% block content %}
 
-<div class="mainDiv">
-
-    <table class="grid" style=" margin-left: auto;margin-right: auto;width: 6em;margin-top:50px">
-    {%for i in range(0, size)%}
-        <tr class="rowX{{i+1}}"></div>
-        {%for y in range(0, size)%}
-            <th class="itemY{{y+1}} neutral"></th>
+<div class="container">
+    <div class="game-board">
+        <table class="grid" style="width: 6em;margin-top:50px">  <!-- margin-left: auto;margin-right: auto; -->
+        {%for i in range(0, size)%}
+            <tr class="rowX{{i+1}}">
+            {%for y in range(0, size)%}
+                <th class="itemY{{y+1}} neutral"></th>
+            {% endfor %}
         {% endfor %}
-        
-    {% endfor %}
     </div>
+    <div class="game-settings">
 
+    </div>
 </div>
+
 <script>startGame()</script>
 
 {% endblock %}
