@@ -21,7 +21,7 @@ class Users(db.Model):
     nb_wins = db.Column(db.Integer, nullable = False)
     nb_defeats = db.Column(db.Integer, nullable = False)
 
-    games = db.relationship('Boards', backref='player') # multiple foreign key to board (many to one)
+    #games = db.relationship('Boards', backref='player') # multiple foreign key to board (many to one)
 
     def __init__(self,login):
         self.login = login
@@ -67,14 +67,15 @@ class Boards(db.Model):
     player_1 = db.Column(Integer, ForeignKey("users.id")) # foreign key to user
     player_2 = db.Column(Integer, ForeignKey("users.id")) # foreign key to user
 
-    def __init__(self, size, state_board, turn, position_p1, position_p2, player_1, player_2):
+    def __init__(self, size, state_board, turn, position_p1, position_p2):
         self.size = size
         self.state_board = state_board # à la création, faire un algorithme qui remplie le tableau de 0 * X cellules
         self.turn = turn
         self.position_p1 = position_p1
         self.position_p2 = position_p2
-        self.player_1 = player_1
-        self.player_2 = player_2
+        #self.player_1 = player_1
+        #self.player_2 = player_2
+        #, player_1, player_2
 
     def update_state(self):
         if self.turn == 1:

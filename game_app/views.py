@@ -3,14 +3,14 @@ from urllib import request
 from flask import Flask, render_template, request
 import flask
 
-from game_app.models import AI, Board, Human
+from game_app.models import AIs, Boards, Humans
 
 app = Flask(__name__)
 app.config.from_object('config')
 size = 4
-board = Board(size, [[2,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,1]], 1, [3,3], [0,0])
-player = Human("log1", "password1", "email1", "player1", "human_player1")
-ia = AI()
+board = Boards(size, [[2,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,1]], 1, [3,3], [0,0])
+player = Humans("password1", "email1", "player1", "human_player1")
+ia = AIs()
 
 @app.route('/')
 def index():
