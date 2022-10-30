@@ -11,18 +11,52 @@ function changeStyleMode(){
 
 let player_1 = {icon : "../Player_icon/horse.svg"}
 let player_2 = {icon : "../Player_icon/spider.svg"}
+let players = [player_1, player_2]
 let state_board
 let turn
 
 function playGame(){
 
-        fetch('/game/play/').then(response => response.json()).then(function(data){
-                turn = data['turn']
-                state_board = data['state_board']
-                player_1.position = data['position_p1']
-                player_2.position = data['position_p2']
-                refreshGrid()
-                displayPossibleMove()
+        fetch('/game/isDone/').then(response => response.json()).then(async function(data){
+                isDone = data['isDone']
+
+                
+
+                fetch('/game/play/').then(response => response.json()).then(async function(data){
+                        turn = data['turn']
+                        state_board = data['state_board']
+                        player_1.position = data['position_p1']
+                        player_2.position = data['position_p2']
+                        player_1.isAi = data['player1IsAI']
+                        player_2.isAi = data['player2isAI']
+                        refreshGrid()
+                        
+                        if(!isDone){
+                                if(!players[turn-1].isAi)
+                                        displayPossibleMove()
+                                else{
+                                        url = '/game/moveAI'
+                                        const reponse = await fetch(url, {
+                                                method: 'POST',
+                                                headers:{
+                                                        'Content-Type': 'application/json',
+                                                }  
+                                        })
+                                        .then((response) => response.json())
+                                        .then((data) => {
+                                        console.log('Success:', data);
+                                        })
+                                        .catch((error) => {
+                                        console.error('Error:', error);
+                                        }); 
+                                        playGame() 
+                                }
+                        }
+                        else{
+                                winner = data['winner']
+                                alert("Partie finie, gagnant : ", winner)
+                        }
+        })
         })
         
 }
@@ -71,7 +105,6 @@ function displayPossibleMove(){
         if((playerPosition[1] + 1 <= 3) && table.children[playerPosition[0]].children[playerPosition[1] + 1].className != opponentPlayer)
                 possibleMove.push([playerPosition[0], (playerPosition[1] + 1)])
 
-        console.log(possibleMove)
 
         for(let i in possibleMove){
                 
