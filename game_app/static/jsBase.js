@@ -14,76 +14,72 @@ let player_2 = {icon : "../Player_icon/spider.svg"}
 let players = [player_1, player_2]
 let state_board
 let turn
+let isDone = false
+let movement
 
 function playGame(){
-
-        fetch('/game/isDone/').then(response => response.json()).then(async function(data){
-                isDone = data['isDone']
-
+        fetch('/game/start/').then(response => response.json()).then(async function(data){
+                turn = data['turn']
+                state_board = data['state_board']
+                player_1.position = data['position_p1']
+                player_2.position = data['position_p2']
+                player_1.isAi = data['player1_is_AI']
+                player_2.isAi = data['player2_is_AI']
+                isDone = data['is_done']
                 
-
-                fetch('/game/play/').then(response => response.json()).then(async function(data){
-                        turn = data['turn']
-                        state_board = data['state_board']
-                        player_1.position = data['position_p1']
-                        player_2.position = data['position_p2']
-                        player_1.isAi = data['player1IsAI']
-                        player_2.isAi = data['player2isAI']
+                if(!isDone)
+                        turnGame()
+                else{
                         refreshGrid()
-                        
-                        if(!isDone){
-                                if(!players[turn-1].isAi)
-                                        displayPossibleMove()
-                                else{
-                                        url = '/game/moveAI'
-                                        const reponse = await fetch(url, {
-                                                method: 'POST',
-                                                headers:{
-                                                        'Content-Type': 'application/json',
-                                                }  
-                                        })
-                                        .then((response) => response.json())
-                                        .then((data) => {
-                                        console.log('Success:', data);
-                                        })
-                                        .catch((error) => {
-                                        console.error('Error:', error);
-                                        }); 
-                                        playGame() 
-                                }
-                        }
-                        else{
-                                winner = data['winner']
-                                alert("Partie finie, gagnant : ", winner)
-                        }
-        })
+                        alert("Partie finie")         
+                }    
+        }
+)}
+
+function turnGame(){
+        refreshGrid()
+        displayPossibleMove()
+}
+
+
+function move(x, y){
+        let move = [x,y]
+
+        if (move[0] < players[turn - 1].position[0]){
+                movement = "UP"
+        }
+        else if (move[0] > players[turn - 1].position[0]){
+                movement = "DOWN"
+        }
+        else if (move[1] < players[turn - 1].position[1]){
+                movement = "LEFT"
+        }
+        else{
+                movement = "RIGHT"
+        }
+        fetch("/game/move?movement=" + movement, {
+                method : "GET",
+                headers : {"Content-Type": "application/json"},
+                
+        }).then(response => response.json()).then(async function(data){
+                turn = data['turn']
+                state_board = data['state_board']
+                player_1.position = data['position_p1']
+                player_2.position = data['position_p2']
+                player_1.isAi = data['player1_is_AI']
+                player_2.isAi = data['player2_is_AI']
+                isDone = data['is_done'] 
+                if(!isDone)
+                        turnGame()
+                else{
+                        refreshGrid()
+                        alert("Partie finie")         
+                }
         })
         
 }
 
 
-async function move(x, y){
-        let move = [x,y]
-        console.log(move)
-        url = '/game/move?move=' + move
-        console.log(url)
-        const reponse = await fetch(url, {
-                method: 'POST',
-                headers:{
-                        'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(move),
-        })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log('Success:', data);
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
-        turn = turn == 1 ? 2 : 1  
-        playGame()   
-}
 
 function displayPossibleMove(){
         let table = document.getElementsByClassName("grid")[0].children[0]

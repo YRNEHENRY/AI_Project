@@ -10,7 +10,7 @@ app.config.from_object('config')
 size = 4
 player = Humans("password1", "email1", "player1", "human_player1")
 ai = AIs()
-board = Boards(size, [[2,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,1]], 1, [3,3], [0,0], ai, player)
+board = Boards(size, ai, ai)
 ai.set_board(board)
 
 @app.route('/')
@@ -21,36 +21,23 @@ def index():
 def game():
     return render_template('game.html', size = size)
 
-@app.route('/game/play/')
+@app.route('/game/start/')
 def start():
-    return {"state_board" : board.state_board, "turn" : board.turn, "position_p1" : board.position_p1, "position_p2" : board.position_p2, "player1IsAI" : isinstance(board.player_1, AIs), "player2isAI" : isinstance(board.player_2, AIs)}
+    is_done = board.play()
+    return {"state_board" : board.get_tab_state(), "turn" : board.turn, "position_p1" : board.positions[0], "position_p2" : board.positions[1], "player1_is_AI" : isinstance(board.player_1, AIs), "player2_is_AI" : isinstance(board.player_2, AIs), "is_done" : is_done[0]}
 
 
-@app.route('/game/move', methods = ['GET', 'POST'])
+@app.route('/game/move/')
 def move():
-    if flask.request.method == 'POST':
-        move = request.args.get('move')
-        move = move.split(",")
-        move = list(map(int, move))
-        if board.turn == 1:
-            board.position_p1 = move
-        else:
-            board.position_p2 = move
-        board.update_state()
-        
-    return {"Success": True}
+    movement = request.args.get('movement')
+    
+    is_done = board.move_player(movement)
+    board.play()
+    return {"state_board" : board.get_tab_state(), "turn" : board.turn, "position_p1" : board.positions[0], "position_p2" : board.positions[1], "player1_is_AI" : isinstance(board.player_1, AIs), "player2_is_AI" : isinstance(board.player_2, AIs), "is_done" : is_done[0]}
 
-@app.route('/game/moveAI', methods = ['GET', 'POST'])
-def moveAI():
-    if flask.request.method == 'POST':
-        position = board.position_p1 if board.turn == 1 else board.position_p2
-        board.players[board.turn - 1].play(position)
-    return {"Success": True}
 
-@app.route('/game/isDone/')
-def is_done():
-    is_done, winner = board.is_done()
-    return {"isDone" : is_done, "winner" : winner}
+
+
 
 @app.route('/rules/')
 def rules():
