@@ -63,9 +63,6 @@ class AIs (db.Model):
         possible_move = self.board.get_possible_move(position)
         
         i_random = random.randint(0, len(possible_move) - 1)
-        print("Move possible pour ia",possible_move)
-        print("choix i ", i_random)
-        print("nbr de choix ", len(possible_move))
 
         self.board.positions[self.board.turn - 1] = possible_move[i_random]
 
@@ -101,16 +98,16 @@ class Boards(db.Model):
 
     def play(self):
         is_done = self.is_done()[0]
-        print(is_done)
+
         while isinstance(self.players[self.turn - 1], AIs) and not is_done:
             self.players[self.turn - 1].play(self.positions[self.turn - 1])
-            print("(joueur : ", self.turn,")Ia vient de jouer : ", self.get_tab_state())
+
             is_done = self.is_done()[0]
-            print("\n\n")
+
         return self.is_done()
 
     def move_player(self, movement):
-        print("ancienne pos ", self.positions[self.turn - 1])
+
         if movement == 'UP':
             self.positions[self.turn - 1][0] -= 1
         elif movement == "DOWN":
@@ -169,7 +166,7 @@ class Boards(db.Model):
     
         x = self.positions[self.turn - 1][0]
         y = self.positions[self.turn - 1][1]
-        print("nouvel pos : ", x, " ", y)
+
         state[x][y] = 1 if self.turn == 1 else 2
         self.turn = 2 if self.turn == 1 else 1
         self.state_board = self.state_to_string(state)
