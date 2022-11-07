@@ -111,13 +111,13 @@ class Boards(db.Model):
     player_1 = db.Column(Integer, ForeignKey("users.id")) # foreign key to user
     player_2 = db.Column(Integer, ForeignKey("users.id")) # foreign key to user
 
-    def __init__(self, size, state_board, turn, position_p1, position_p2, player_1, player_2):
+    def __init__(self, size, player_1, player_2):
         self.size = size
-        self.state_board = state_board # à la création, faire un algorithme qui remplie le tableau de 0 * X cellules
-        self.turn = turn
-        self.position_p1 = position_p1
-        self.position_p2 = position_p2
-        self.positions = [position_p1, position_p2]
+        self.state_board = "1" + "0"*((size * size) - 2) + "2"
+        self.turn = 1
+        self.position_p1 = "00"
+        self.position_p2 = str(size-1)*2
+        self.positions = [self.position_p1, self.position_p2]
         self.player_1 = player_1
         self.player_2 = player_2
         self.players = [player_1, player_2]
