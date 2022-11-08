@@ -30,8 +30,7 @@ function playGame(){
                 if(!isDone)
                         turnGame()
                 else{
-                        refreshGrid()
-                        alert("Partie finie")         
+                        refreshGrid()        
                 }    
         }
 )}

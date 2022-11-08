@@ -8,7 +8,8 @@ from game_app.models import AIs, Boards, Humans
 app = Flask(__name__)
 app.config.from_object('config')
 size = 4
-player = Humans("password1", "email1", "player1", "human_player1")
+player1 = Humans("password1", "email1", "player1", "human_player1")
+player2 = Humans("password1", "email1", "player1", "human_player1")
 ai = AIs()
 board = Boards(size, ai, ai)
 ai.set_board(board)

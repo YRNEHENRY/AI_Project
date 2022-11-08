@@ -20,8 +20,9 @@ table{
 
 
 th{
-    padding: 30px;
-    border: solid 2px white;
+    min-width: 80px;
+    border: solid 2px;
+    height: 80px;
 }
 
 nav, footer{

@@ -9,8 +9,17 @@ table{
 }
 
 th{
-    padding: 30px;
+    min-width: 80px;
     border: solid 2px;
+    height: 80px;
+}
+
+.player1{
+    background-color: greenyellow;
+}
+
+.player2{
+    background-color: red;
 }
 
 
@@ -92,7 +101,7 @@ body{
 }
 
 .movable{
-    background-color: aqua;
+    background-color: aquamarine;
 }
 
 
