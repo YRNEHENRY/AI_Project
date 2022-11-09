@@ -9,7 +9,7 @@ The projet is running with python. So first of all, you will need to download it
 <br>Open you're terminal and write this line :
 
     python get-pip.py    
-<br>This command will allow us to install the pip command. This command is used to install, from the console, various python frameworks.
+This command will allow us to install the pip command. This command is used to install, from the console, various python frameworks.
 
 ### Flask
 The first framework we will use is Flask. Flask is an open-source framework in web and python. This one will allow us to run a web server using python.
