@@ -28,11 +28,13 @@ function playGame(){
                 player_1.isAi = data['player1_is_AI']
                 player_2.isAi = data['player2_is_AI']
                 isDone = data['is_done']
+                winner = data['winner']
                 
                 if(!isDone)
                         turnGame()
                 else{
-                        refreshGrid()        
+                        refreshGrid() 
+                        alert("Partie finie, gagnant : " + winner)        
                 }    
         }
 )}
@@ -76,11 +78,12 @@ function move(x, y){
                 player_1.isAi = data['player1_is_AI']
                 player_2.isAi = data['player2_is_AI']
                 isDone = data['is_done'] 
+                winner = data['winner']
                 if(!isDone)
                         turnGame()
                 else{
                         refreshGrid()
-                        alert("Partie finie")         
+                        alert("Partie finie, gagnant : "+ winner)         
                 }
         })
         
@@ -121,7 +124,7 @@ function displayPossibleMove(){
 
         for(let i in possibleMove){
                 
-                table.children[possibleMove[i][0]].children[possibleMove[i][1]].className += " movable"
+                table.children[possibleMove[i][0]].children[possibleMove[i][1]].children[0].className += "show_move"
                 table.children[possibleMove[i][0]].children[possibleMove[i][1]].addEventListener("click", move.bind(null, possibleMove[i][0], possibleMove[i][1]))
                 
         }
@@ -139,20 +142,21 @@ function refreshGrid(){
                 for(let y in state_board[i]){
                         table.children[i].children[y].replaceWith(table.children[i].children[y].cloneNode(true))
                         switch(state_board[i][y]){
-                                case 0 :table.children[i].children[y].innerHTML = ""
+                                case 0 :table.children[i].children[y].children[0].innerHTML = ""
                                         table.children[i].children[y].className = "neutral"
                                         break;
-                                case 1 : table.children[i].children[y].innerHTML = "1"
+                                case 1 :table.children[i].children[y].children[0].innerHTML = "1"
                                         table.children[i].children[y].className = "player1"
                                         break;
-                                case 2 : table.children[i].children[y].innerHTML = "2"
+                                case 2 :table.children[i].children[y].children[0].innerHTML = "2"
                                         table.children[i].children[y].className = "player2"
                                         break;
                         }
+                        table.children[i].children[y].children[0].className = ""
                         table.children[i].children[y]
                 }
         }
-        table.children[player_1.position[0]].children[player_1.position[1]].innerHTML = "P1"
-        table.children[player_2.position[0]].children[player_2.position[1]].innerHTML = "P2"
+        table.children[player_1.position[0]].children[player_1.position[1]].children[0].innerHTML = "P1"
+        table.children[player_2.position[0]].children[player_2.position[1]].children[0].innerHTML = "P2"
 
 }

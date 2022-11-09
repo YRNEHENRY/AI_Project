@@ -2,26 +2,6 @@
     margin: 20px;
 }
 
-table{
-    border-spacing:0;
-    border-collapse: collapse;
-    margin: 20px;
-}
-
-th{
-    min-width: 80px;
-    border: solid 2px;
-    height: 80px;
-}
-
-.player1{
-    background-color: greenyellow;
-}
-
-.player2{
-    background-color: red;
-}
-
 
 nav, footer{
     color:white;
@@ -100,9 +80,6 @@ body{
     background-color: greenyellow;
 }
 
-.movable{
-    background-color: aquamarine;
-}
 
 
 /* base css */
@@ -155,4 +132,27 @@ a:visited{
     width: 15px;
     background-color: lightgrey;
     border-radius: 50%;
+    border:solid lightgray;
+    margin-left: auto;
+    margin-right: auto;
   }
+
+  table{
+    border-spacing:0;
+    border-collapse: collapse;
+    margin: 20px;
+}
+
+th{
+    min-width: 80px;
+    border: solid 2px;
+    height: 80px;
+}
+
+.player1{
+    background-color: greenyellow;
+}
+
+.player2{
+    background-color: red;
+}

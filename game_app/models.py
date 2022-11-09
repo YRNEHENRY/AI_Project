@@ -181,12 +181,14 @@ class Boards(db.Model):
                 return is_done, winner
 
         is_done = True
-        nb_1 = op.countOf(self.get_tab_state(), 1)
-        nb_2 = op.countOf(self.get_tab_state(), 2)
+        nb_1 = self.state_board.count('1')
+        print(nb_1)
+        nb_2 = self.state_board.count('2')
+        print(nb_2)
         if nb_1 > nb_2:
-            winner = self.player_1
+            winner = self.player_1.first_name if not isinstance(self.player_1, AIs) else "AI n°1"
         elif nb_1 < nb_2:
-            winner = self.player_2
+            winner = self.player_2.first_name if not isinstance(self.player_2, AIs) else "AI n°2"
         return is_done, winner
 
 

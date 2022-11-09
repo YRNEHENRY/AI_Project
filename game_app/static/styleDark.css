@@ -3,12 +3,6 @@ body{
     font-family: 'Saira', sans-serif;
 }
 
-table{
-    border-spacing:0;
-    border-collapse: collapse;
-    margin: 20px;
-}
-
 #rulesDiv{
     margin: 20px;
     color: white;
@@ -19,11 +13,6 @@ table{
 }
 
 
-th{
-    min-width: 80px;
-    border: solid 2px;
-    height: 80px;
-}
 
 nav, footer{
     color:white;
@@ -147,4 +136,27 @@ a:visited{
     width: 15px;
     background-color: lightgrey;
     border-radius: 50%;
+    border:solid lightgray;
+    margin-left: auto;
+    margin-right: auto;
   }
+
+  .player1{
+    background-color: greenyellow;
+}
+
+.player2{
+    background-color: red;
+}
+
+table{
+    border-spacing:0;
+    border-collapse: collapse;
+    margin: 20px;
+}
+
+th{
+    min-width: 80px;
+    border: solid 2px;
+    height: 80px;
+}
