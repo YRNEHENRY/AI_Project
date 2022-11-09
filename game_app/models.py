@@ -1,9 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-import ast
-import logging as lg
 import random
-import operator as op
 
 from sqlalchemy import Column, ForeignKey, Integer
 
@@ -109,7 +106,7 @@ class Boards(db.Model):
 
     def move_player(self, movement):
 
-        if movement == 'UP':
+        if movement == "UP":
             self.positions[self.turn - 1][0] -= 1
         elif movement == "DOWN":
             self.positions[self.turn - 1][0] += 1
@@ -132,10 +129,10 @@ class Boards(db.Model):
         if (position[1] - 1) >= 0 and self.get_tab_state()[position[0]][position[1] - 1] != opponent_turn:
             possible_move.append([position[0], position[1] - 1])
         
-        if (position[0] + 1) <= 3 and self.get_tab_state()[position[0] + 1][position[1]] != opponent_turn:
+        if (position[0] + 1) <= self.size-1 and self.get_tab_state()[position[0] + 1][position[1]] != opponent_turn:
             possible_move.append([position[0] + 1, position[1]])
 
-        if (position[1] + 1) <= 3 and self.get_tab_state()[position[0]][position[1] + 1] != opponent_turn:
+        if (position[1] + 1) <= self.size-1 and self.get_tab_state()[position[0]][position[1] + 1] != opponent_turn:
             possible_move.append([position[0], position[1] + 1])
 
         return possible_move
@@ -176,15 +173,13 @@ class Boards(db.Model):
     def is_done(self):
         is_done = False
         winner = "Nobody"
-        for i in range(0, 4):
+        for i in range(0, self.size):
             if 0 in self.get_tab_state()[i]:
                 return is_done, winner
 
         is_done = True
         nb_1 = self.state_board.count('1')
-        print(nb_1)
         nb_2 = self.state_board.count('2')
-        print(nb_2)
         if nb_1 > nb_2:
             winner = self.player_1.first_name if not isinstance(self.player_1, AIs) else "AI n°1"
         elif nb_1 < nb_2:
