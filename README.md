@@ -23,6 +23,10 @@ Then, to run our database, we will need SQLAlchemy. As before you will just need
 ### The github repository
 Finally, all you need to do is clone or download our project !
 
+
+    https://github.com/YRNEHENRY/AI_Project.git
+
+
 DE BUCK Henry 👨🏼‍💻 & SOMME Aurélien 👨🏻‍💻
 
 Review 10/10/22 : Squelette :
