@@ -5,7 +5,7 @@ To keep this project running, you will need 3 elements : python, flask and sqlal
 
 ### Python
 The projet is running with python. So first of all, you will need to download it at this link : https://www.python.org/downloads/
-<br>Now that python is ready, we will need one last element for our future installations : pip.
+<br>Now that python is ready, we will need one last element for our future installations: `pip install`.
 <br>Open you're terminal and write this line :
 
     python get-pip.py    
