@@ -84,7 +84,8 @@ class Boards(db.Model):
     player_1 = db.Column(Integer, ForeignKey("users.id")) # foreign key to user
     player_2 = db.Column(Integer, ForeignKey("users.id")) # foreign key to user
 
-    def __init__(self, size, player_1, player_2):
+    def __init__(self, id, size, player_1, player_2):
+        self.id = id
         self.size = size
         self.state_board = "1" + "0"*((size * size) - 2) + "2"
         self.turn = 1

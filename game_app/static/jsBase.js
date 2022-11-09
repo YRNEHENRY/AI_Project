@@ -16,10 +16,12 @@ let state_board
 let turn
 let isDone = false
 let movement
+let idBoard
 
 function playGame(){
         fetch('/game/start/').then(response => response.json()).then(async function(data){
                 turn = data['turn']
+                idBoard = data['id_board']
                 state_board = data['state_board']
                 player_1.position = data['position_p1']
                 player_2.position = data['position_p2']
@@ -46,17 +48,23 @@ function move(x, y){
 
         if (move[0] < players[turn - 1].position[0]){
                 movement = "UP"
+                players[turn-1].position[0] -= 1
         }
         else if (move[0] > players[turn - 1].position[0]){
                 movement = "DOWN"
+                players[turn-1].position[0] += 1
         }
         else if (move[1] < players[turn - 1].position[1]){
                 movement = "LEFT"
+                players[turn-1].position[1] -= 1
         }
         else{
                 movement = "RIGHT"
+                players[turn-1].position[1] += 1
         }
-        fetch("/game/move?movement=" + movement, {
+        updateState(movement)
+        parameter = movement + "|" + idBoard + "|" + turn + "|" + state_board
+        fetch("/game/move?movement=" + parameter, {
                 method : "GET",
                 headers : {"Content-Type": "application/json"},
                 
@@ -76,6 +84,16 @@ function move(x, y){
                 }
         })
         
+}
+
+function updateState(movement){
+
+
+
+        x = players[turn - 1].position[0]
+        y = players[turn - 1].position[1]
+        state_board[x][y] = turn
+        turn = turn == 1 ? 2 : 1    
 }
 
 
