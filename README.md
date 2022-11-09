@@ -1,5 +1,21 @@
 # Territory : artificial intelligence creation's
 
+## Installations
+To keep this project running, you will need 3 elements : python, flask and sqlalchemy.
+
+### Python
+The projet is running with python. So first of all, you will need to download it at this link : https://www.python.org/downloads/
+Now that python is ready, we will need one last element for our future installations : pip.
+Open you're terminal and write this line : `python get-pip.py`
+
+
+### Flask
+
+
+### SqlAlchemy
+
+### The github repository
+
 DE BUCK Henry 👨🏼‍💻 & SOMME Aurélien 👨🏻‍💻
 
 Review 10/10/22 : Squelette :
