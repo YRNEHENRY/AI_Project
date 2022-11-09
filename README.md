@@ -19,8 +19,12 @@ The first framework we will use is Flask. Flask is an open-source framework in w
     pip install Flask
 
 ### SqlAlchemy
+Then, to run our database, we will need SQLAlchemy. As before you will just need to use this command:
+
+    pip install -U Flask-SQLAlchemy
 
 ### The github repository
+Finally, all you need to do is clone or download our project !
 
 DE BUCK Henry 👨🏼‍💻 & SOMME Aurélien 👨🏻‍💻
 
