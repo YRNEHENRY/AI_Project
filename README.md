@@ -21,7 +21,7 @@ Then, to run our database, we will need SQLAlchemy. As before you will just need
 
     pip install -U Flask-SQLAlchemy
 ### The github repository
-Finally, all you need to do is clone or download our project !
+Finally, all you need to do is clone or download our project and running our `run.py` file !
 
 
     https://github.com/YRNEHENRY/AI_Project.git
