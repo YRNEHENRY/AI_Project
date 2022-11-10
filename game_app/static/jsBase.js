@@ -142,16 +142,17 @@ function refreshGrid(){
                 for(let y in state_board[i]){
                         table.children[i].children[y].replaceWith(table.children[i].children[y].cloneNode(true))
                         switch(state_board[i][y]){
-                                case 0 :table.children[i].children[y].children[0].innerHTML = ""
+                                case 0 :
                                         table.children[i].children[y].className = "neutral"
                                         break;
-                                case 1 :table.children[i].children[y].children[0].innerHTML = "1"
+                                case 1 :
                                         table.children[i].children[y].className = "player1"
                                         break;
-                                case 2 :table.children[i].children[y].children[0].innerHTML = "2"
+                                case 2 :
                                         table.children[i].children[y].className = "player2"
                                         break;
                         }
+                        table.children[i].children[y].children[0].innerHTML = ""
                         table.children[i].children[y].children[0].className = ""
                         table.children[i].children[y]
                 }
