@@ -164,11 +164,121 @@ class Boards(db.Model):
     
         x = self.positions[self.turn - 1][0]
         y = self.positions[self.turn - 1][1]
-
-        state[x][y] = 1 if self.turn == 1 else 2
+        state[x][y] = self.turn
+        self.state_board = self.state_to_string(state)
+        self.check_enclosure()
         self.turn = 2 if self.turn == 1 else 1
+        
+
+    def update_enclosure(self, enclosure):
+        x = 0
+        y = 0
+        state = self.get_tab_state()
+        for case in enclosure:
+            
+            x = case[0]
+            y = case[1]
+            state[x][y] = self.turn
+
         self.state_board = self.state_to_string(state)
 
+
+
+    def check_enclosure(self):
+        neutral_cases = self.get_neutral_cases(self.positions[self.turn - 1])
+        enclosures = []
+        enclosure = []
+        for case in neutral_cases:
+            enclosure.append(case)
+            response = self.check_neighbour(enclosure, case)
+            if response == 0:
+                enclosure.clear()
+            else:
+                enclosures = enclosures + enclosure
+
+        
+        
+        self.update_enclosure(enclosures)
+        
+
+
+
+
+        
+    def check_neighbour(self, enclosure, position):
+
+
+        opponent = 2 if self.turn == 1 else 1
+        
+        neighbours = self.get_all_neighbours(position)
+        i = 0
+        while i < len(neighbours):
+            if self.get_tab_state()[neighbours[i][0]][neighbours[i][1]] == self.turn:
+                del neighbours[i]
+                i -= 1
+            elif neighbours[i] in enclosure:
+
+                del neighbours[i]
+
+                i -= 1
+            i += 1
+
+        i = 0
+        while i < len(neighbours):
+            if self.get_tab_state()[neighbours[i][0]][neighbours[i][1]] == opponent:
+                enclosure.clear()
+                return 0
+            i += 1
+        response = 1
+        if i == len(neighbours):
+            if position not in enclosure:
+                enclosure.append(position)
+            for neighbour in neighbours:
+                response = self.check_neighbour(enclosure, neighbour)
+                if response == 0:
+                    break
+
+            return response
+            
+                
+
+        
+
+        
+
+    def get_all_neighbours(self, position):
+        neighbours = []
+
+        if (position[0] - 1) >= 0:
+            neighbours.append([position[0] - 1, position[1]])
+        
+        if (position[1] - 1) >= 0:
+            neighbours.append([position[0], position[1] - 1])
+        
+        if (position[0] + 1) <= self.size-1:
+            neighbours.append([position[0] + 1, position[1]])
+
+        if (position[1] + 1) <= self.size-1:
+            neighbours.append([position[0], position[1] + 1])
+
+        return neighbours
+        
+            
+
+
+
+    def get_neutral_cases(self, position):
+        neutral_cases = self.get_possible_move(position)
+
+        i = 0
+        while i < len(neutral_cases):
+            if self.get_tab_state()[neutral_cases[i][0]][neutral_cases[i][1]] == 1 or self.get_tab_state()[neutral_cases[i][0]][neutral_cases[i][1]] == 2:
+                del neutral_cases[i]
+                i -= 1
+            i +=1
+
+        return neutral_cases
+        
 
     def is_done(self):
         is_done = False
