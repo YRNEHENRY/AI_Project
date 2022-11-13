@@ -26,7 +26,7 @@ def start():
     player1 = Humans("password1", "email1", "player1", "human_player1")
     player2 = Humans("password2", "email2", "player2", "human_player2")
     ai = AIs()
-    board = Boards(ids[0], size, player2, ai)
+    board = Boards(ids[0], size, player1, ai)
     ids.remove(ids[0])
     ai.set_board(board)
     boards[board.id] = board
@@ -43,12 +43,15 @@ def move():
     turn = int(parameter[2])
     state = ''.join(parameter[3].split(","))
     is_done = boards[id].move_player(move)
-    
-    boards[id].play()
-    return {"state_board" : boards[id].get_tab_state(), "turn" : boards[id].turn, "position_p1" : boards[id].positions[0], "position_p2" : boards[id].positions[1], "player1_is_AI" : isinstance(boards[id].player_1, AIs), "player2_is_AI" : isinstance(boards[id].player_2, AIs), "is_done" : is_done[0], "winner" : is_done[1]}
-    #else:
-        #triche/erreur
-        #return {"Error" : 0}
+
+    if state == boards[id].state_board:
+        boards[id].check_enclosure()
+        boards[id].play()
+        boards[id].check_enclosure()
+        return {"state_board" : boards[id].get_tab_state(), "turn" : boards[id].turn, "position_p1" : boards[id].positions[0], "position_p2" : boards[id].positions[1], "player1_is_AI" : isinstance(boards[id].player_1, AIs), "player2_is_AI" : isinstance(boards[id].player_2, AIs), "is_done" : is_done[0], "winner" : is_done[1]}
+    else:
+        #triche
+        return {"state_board" : boards[id].get_tab_state(), "turn" : boards[id].turn, "position_p1" : [-1,-1], "position_p2" : [-1,-1], "player1_is_AI" : isinstance(boards[id].player_1, AIs), "player2_is_AI" : isinstance(boards[id].player_2, AIs), "is_done" : is_done[0], "winner" : is_done[1]}
 
 
 

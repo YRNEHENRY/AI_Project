@@ -161,13 +161,17 @@ class Boards(db.Model):
 
     def update_state(self):
         state = self.get_tab_state()
-    
+        opponent = 2 if self.turn == 1 else 1
+
         x = self.positions[self.turn - 1][0]
         y = self.positions[self.turn - 1][1]
-        state[x][y] = self.turn
-        self.state_board = self.state_to_string(state)
-        self.check_enclosure()
-        self.turn = 2 if self.turn == 1 else 1
+        if state[x][y] != opponent:
+            state[x][y] = self.turn
+            self.state_board = self.state_to_string(state)
+            self.turn = 2 if self.turn == 1 else 1
+        else:
+            #triche
+            self.state_board = "0" + "0"*((self.size * self.size) - 2) + "0"
         
 
     def update_enclosure(self, enclosure):
