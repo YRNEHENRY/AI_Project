@@ -42,10 +42,9 @@ def move():
     id = int(parameter[1])
     turn = int(parameter[2])
     state = ''.join(parameter[3].split(","))
-    is_done = boards[id].move_player(move)
+    boards[id].move_player(move)
 
     if state == boards[id].state_board:
-        is_done = boards[id].check_enclosure()
         boards[id].play()
         is_done = boards[id].check_enclosure()
         return {"state_board" : boards[id].get_tab_state(), "turn" : boards[id].turn, "position_p1" : boards[id].positions[0], "position_p2" : boards[id].positions[1], "player1_is_AI" : isinstance(boards[id].player_1, AIs), "player2_is_AI" : isinstance(boards[id].player_2, AIs), "is_done" : is_done[0], "winner" : is_done[1]}
