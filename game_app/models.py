@@ -203,6 +203,7 @@ class Boards(db.Model):
         
         
         self.update_enclosure(enclosures)
+        return self.is_done()
         
 
 
