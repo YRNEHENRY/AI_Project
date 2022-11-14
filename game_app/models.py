@@ -75,7 +75,7 @@ class Boards(db.Model):
         is_done = self.is_done()[0]
 
         while isinstance(self.players[self.turn - 1], AIs) and not is_done:
-            self.players[self.turn - 1].play(self.positions[self.turn - 1])
+            self.players[self.turn - 1].play(self.positions[self.turn - 1], self.state_board)
 
             is_done = self.is_done()[0]
 
