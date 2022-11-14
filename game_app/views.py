@@ -2,11 +2,13 @@ from urllib import request
 from flask import Flask, render_template, request
 
 
-from game_app.models import AIs, Boards, Humans
+from game_app.models import Boards, Humans
+from game_app.ai import AIs
+
 
 app = Flask(__name__)
 app.config.from_object('config')
-size = 5
+size = 4
 
 #dico temporaire en attendant l'accès à la DB
 boards = {}
