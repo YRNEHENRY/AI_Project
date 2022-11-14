@@ -43,3 +43,8 @@ Review 30/10/22 : Jeu de base :
 - [x] get_possible_move devrait être lié à une partie et pas à un joueur (ici : l'IA) + /!\ harcodage de la taille du board
 - [x] éviter de print dans le code du serveur... 
 - [x] 4x fetch à chaque tour de jeu ? Le JS ne doit en principe faire qu'un seul appel serveur par "tour" et ne contient aucune logique...
+
+Review 13/11/22 : Enclos :
+----------------------------
+- Ca marche :)
+- on discute de la gestion du mouvement demain.
