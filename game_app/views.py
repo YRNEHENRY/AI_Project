@@ -2,7 +2,7 @@ from urllib import request
 from flask import Flask, render_template, request
 
 
-from game_app.models import Boards, Humans
+from game_app.models import Boards, Humans, init_db
 from game_app.ai import AIs
 
 
@@ -17,6 +17,7 @@ ids = list(range(1, 100))
 
 @app.route('/')
 def index():
+    init_db()
     return render_template('index.html', size = size)
 
 @app.route('/game/')

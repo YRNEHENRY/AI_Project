@@ -1,3 +1,20 @@
+class Users():
+
+    def __init__(self,login):
+        self.login = login
+
+
+class Humans (Users):
+
+    def __init__(self, login, password, email, name, first_name):
+        super.__init__(login)
+        self.password = password
+        self.email = email
+        self.name = name
+        self.first_name = first_name
+
+
+
 class Boards():
 
     def __init__(self, size, player_1, player_2):
