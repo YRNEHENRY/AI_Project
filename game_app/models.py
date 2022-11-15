@@ -62,11 +62,11 @@ class Boards(db.Model):
         self.size = size
         self.state_board = "1" + "0"*((size * size) - 2) + "2"
         self.turn = 1
-        self.position_p1 = [0,0]
-        self.position_p2 = [self.size-1, self.size-1]
-        #self.positions = [self.position_p1, self.position_p2]
+        self.position_p1 = "00"
+        self.position_p2 = str(size-1)*2
         self.player_1 = player_1
         self.player_2 = player_2
+        #self.positions = [self.position_p1, self.position_p2]
         #self.players = [player_1, player_2]
 
     def play(self):
