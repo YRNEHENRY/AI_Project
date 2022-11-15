@@ -17,7 +17,6 @@ ids = list(range(1, 100))
 
 @app.route('/')
 def index():
-    init_db()
     return render_template('index.html', size = size)
 
 @app.route('/game/')
