@@ -1,13 +1,15 @@
-class Users():
+from game_app.ai import AI
+
+class User():
 
     def __init__(self,login):
         self.login = login
 
 
-class Humans (Users):
+class Human(User):
 
     def __init__(self, login, password, email, name, first_name):
-        super.__init__(login)
+        super().__init__(login)
         self.password = password
         self.email = email
         self.name = name
@@ -15,9 +17,10 @@ class Humans (Users):
 
 
 
-class Boards():
+class Board():
 
-    def __init__(self, size, player_1, player_2):
+    def __init__(self, id, size, player_1, player_2):
+        self.id = id
         self.size = size
         self.state_board = "1" + "0"*((size * size) - 2) + "2"
         self.turn = 1
@@ -31,7 +34,7 @@ class Boards():
     def play(self):
         is_done = self.is_done()[0]
 
-        while isinstance(self.players[self.turn - 1], AIs) and not is_done:
+        while isinstance(self.players[self.turn - 1], AI) and not is_done:
             self.players[self.turn - 1].play(self.positions[self.turn - 1], self.state_board)
 
             is_done = self.is_done()[0]
@@ -230,7 +233,7 @@ class Boards():
         nb_1 = self.state_board.count('1')
         nb_2 = self.state_board.count('2')
         if nb_1 > nb_2:
-            winner = self.player_1.first_name if not isinstance(self.player_1, AIs) else "AI n°1"
+            winner = self.player_1.first_name if not isinstance(self.player_1, AI) else "AI n°1"
         elif nb_1 < nb_2:
-            winner = self.player_2.first_name if not isinstance(self.player_2, AIs) else "AI n°2"
+            winner = self.player_2.first_name if not isinstance(self.player_2, AI) else "AI n°2"
         return is_done, winner

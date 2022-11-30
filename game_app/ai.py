@@ -1,6 +1,6 @@
 import random
 
-class AIs ():
+class AI ():
 
     def __init__(self):
         self.eps = 0.95

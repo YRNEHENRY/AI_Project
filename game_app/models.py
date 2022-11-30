@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from game_app.ai import AIs
+from game_app.ai import AI
 from sqlalchemy import Column, ForeignKey, Integer
 
 app = Flask(__name__)
