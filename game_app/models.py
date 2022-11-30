@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from game_app.ai import AI
-from sqlalchemy import Column, ForeignKey, Integer
+from sqlalchemy import Column, ForeignKey, Integer, insert
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///example.sqlite"
@@ -10,6 +10,10 @@ db = SQLAlchemy(app)
 def init_db():
     db.drop_all()
     db.create_all()
+
+def insertt(test):
+    db.session.add(test)
+    db.session.commit()
 
 class Users(db.Model):
     __tablename__ = "users"
@@ -21,8 +25,6 @@ class Users(db.Model):
 
     #games = db.relationship('Boards', backref='player') # multiple foreign key to board (many to one)
 
-    def __init__(self,login):
-        self.login = login
 
 
 class Humans (db.Model):
@@ -36,11 +38,6 @@ class Humans (db.Model):
 
     user = db.Column(db.Integer,db.ForeignKey('users.id')) # foreign key to user
 
-    def __init__(self, password, email, name, first_name):
-        self.password = password
-        self.email = email
-        self.name = name
-        self.first_name = first_name
 
 
 class AIs (db.Model):
@@ -49,8 +46,6 @@ class AIs (db.Model):
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
     user = db.Column(db.Integer,db.ForeignKey('users.id')) # foreign key to user
 
-    def __init__(self, password, email, name, first_name):
-        pass
 
 
 class Boards(db.Model):
@@ -66,16 +61,6 @@ class Boards(db.Model):
     player_1 = db.Column(Integer, ForeignKey("users.id")) # foreign key to user
     player_2 = db.Column(Integer, ForeignKey("users.id")) # foreign key to user
 
-    def __init__(self, size, player_1, player_2):
-        self.size = size
-        self.state_board = "1" + "0"*((size * size) - 2) + "2"
-        self.turn = 1
-        self.position_p1 = "00"
-        self.position_p2 = str(size-1)*2
-        self.player_1 = player_1
-        self.player_2 = player_2
-        #self.positions = [self.position_p1, self.position_p2]
-        #self.players = [player_1, player_2]
 
 
 #class Position_history(db.Model):

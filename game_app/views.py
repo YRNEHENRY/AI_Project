@@ -2,7 +2,7 @@ from urllib import request
 from flask import Flask, render_template, request
 
 
-from game_app.models import Boards, Humans
+from game_app.models import Boards, Humans, insertt
 from game_app.ai import AI
 from game_app.business import Human, Board
 
