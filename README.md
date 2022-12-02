@@ -29,7 +29,10 @@ Finally, all you need to do is clone or download our project and running our `ru
 
     https://github.com/YRNEHENRY/AI_Project.git
 
+## How to run the project
 
+
+## Teacher's comments
 Review 10/10/22 : Squelette :
 -----------------------------
 - [x] Manque d'une page d'accueille (avec un bouton pour aller vers le jeu)
