@@ -29,8 +29,16 @@ Finally, all you need to do is clone or download our project and running our `ru
 
     https://github.com/YRNEHENRY/AI_Project.git
 
-## How to run the project
+## The code
 
+### How to run the project
+To run our program you just have to launch the `run.py` file in the root folder.
+
+### How is the code split?
+In the `game_app` folder, We have 3 possibilities :
+- The 1st one is the `static` folder which will contain our js and css files and our pictures
+- The 2nd is the `template` folder which will contain each of our different views of the site
+- The 3rd and last one is the different python files in the folder. Each corresponding to a part of the code.
 
 ## Teacher's comments
 ### Review 10/10/22 : Squelette :
