@@ -1,5 +1,8 @@
 # Territory : artificial intelligence creation's
 
+## What is Territory ?
+Territory is a high school project aiming at running an AI trained with Q-function on a game running online with Flask.
+
 ## Installations
 To keep this project running, you will need 3 elements : python, flask and sqlalchemy.
 
@@ -26,8 +29,6 @@ Finally, all you need to do is clone or download our project and running our `ru
 
     https://github.com/YRNEHENRY/AI_Project.git
 
-
-DE BUCK Henry 👨🏼‍💻 & SOMME Aurélien 👨🏻‍💻
 
 Review 10/10/22 : Squelette :
 -----------------------------
