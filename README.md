@@ -33,13 +33,11 @@ Finally, all you need to do is clone or download our project and running our `ru
 
 
 ## Teacher's comments
-Review 10/10/22 : Squelette :
------------------------------
+### Review 10/10/22 : Squelette :
 - [x] Manque d'une page d'accueille (avec un bouton pour aller vers le jeu)
 - [x] le reste semble OK ;)
 
-Review 30/10/22 : Jeu de base :
-----------------------------
+### Review 30/10/22 : Jeu de base :
 - [x] complétez le reedme
 - [x] constructeur de Board à discuter
 - [x] le mouvement de l'IA est à gérer différemment (directement dans le serveur : quand on recoit un mouvement de joueur, on l'exécute et si le second joueur est une IA, on le fait aussi avant de renvoyer le nouvel état au client)
@@ -48,7 +46,6 @@ Review 30/10/22 : Jeu de base :
 - [x] éviter de print dans le code du serveur... 
 - [x] 4x fetch à chaque tour de jeu ? Le JS ne doit en principe faire qu'un seul appel serveur par "tour" et ne contient aucune logique...
 
-Review 13/11/22 : Enclos :
-----------------------------
+### Review 13/11/22 : Enclos :
 - Ca marche :)
 - on discute de la gestion du mouvement demain.
