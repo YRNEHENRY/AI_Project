@@ -17,7 +17,6 @@ class Human(User):
         self.first_name = first_name
 
 
-
 class Board():
 
     def __init__(self, id, size, player_1, player_2):
@@ -181,13 +180,8 @@ class Board():
                 if response == 0:
                     break
 
-            return response
-            
-                
+            return response     
 
-        
-
-        
 
     def get_all_neighbours(self, position):
         neighbours = []
@@ -205,10 +199,7 @@ class Board():
             neighbours.append([position[0], position[1] + 1])
 
         return neighbours
-        
-            
-
-
+ 
 
     def get_neutral_cases(self, position):
         neutral_cases = self.get_possible_move(position)
