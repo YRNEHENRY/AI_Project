@@ -1,5 +1,6 @@
 from game_app.ai import AI
 
+
 class User():
 
     def __init__(self,login):
@@ -237,3 +238,8 @@ class Board():
         elif nb_1 < nb_2:
             winner = self.player_2.first_name if not isinstance(self.player_2, AI) else "AI n°2"
         return is_done, winner
+
+
+def map_AI(ai):
+    login = 'AI n°', ai.id
+    return AI(ai.id, login)

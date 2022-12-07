@@ -45,6 +45,7 @@ class AIs (db.Model):
 
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
     user = db.Column(db.Integer,db.ForeignKey('users.id')) # foreign key to user
+    Q_table = db.Column(db.String(10000), nullable = True)
 
 
 

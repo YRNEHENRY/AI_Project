@@ -1,10 +1,14 @@
 import random
 
+
+
 class AI ():
 
-    def __init__(self):
+    def __init__(self, id, login):
+        self.login = login
+        self.id = id
         self.eps = 0.95
-        self.values = {}
+        self.Q_table = []
 
 
 

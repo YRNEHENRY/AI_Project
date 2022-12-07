@@ -2,9 +2,9 @@ from urllib import request
 from flask import Flask, render_template, request
 
 
-from game_app.models import Boards, Humans, insertt
+from game_app.models import Boards, Humans, insertt, init_db, AIs
 from game_app.ai import AI
-from game_app.business import Human, Board
+from game_app.business import Human, Board, map_AI
 
 
 app = Flask(__name__)
@@ -28,7 +28,10 @@ def game():
 def start():
     player1 = Human("log1", "pssw1", "email1", "human_player1", "first_name1")
     player2 = Human("log2", "pssw2", "email2", "human_player2", "first_name2")
-    ai = AI()
+
+    ai = map_AI(AIs.query.get(1))
+
+
     board = Board(ids[0], size, player1, ai)
     ids.remove(ids[0])
     ai.set_board(board)
