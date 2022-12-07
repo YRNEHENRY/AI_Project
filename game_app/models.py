@@ -23,10 +23,6 @@ class Users(db.Model):
     nb_wins = db.Column(db.Integer, nullable = False)
     nb_defeats = db.Column(db.Integer, nullable = False)
 
-    #games = db.relationship('Boards', backref='player') # multiple foreign key to board (many to one)
-
-
-
 class Humans (db.Model):
     __tablename__ = "humans"
 
@@ -36,18 +32,15 @@ class Humans (db.Model):
     name = db.Column(db.String(25), nullable = False)
     first_name = db.Column(db.String(25), nullable = False)
 
-    user = db.Column(db.Integer,db.ForeignKey('users.id')) # foreign key to user
-
-
+    fk_user = db.Column(db.Integer,db.ForeignKey('users.id')) # foreign key to user
 
 class AIs (db.Model):
     __tablename__ = "ais"
 
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
-    user = db.Column(db.Integer,db.ForeignKey('users.id')) # foreign key to user
     Q_table = db.Column(db.String(10000), nullable = True)
 
-
+    fk_user = db.Column(db.Integer,db.ForeignKey('users.id')) # foreign key to user
 
 class Boards(db.Model):
     __tablename__ = "boards"
@@ -59,12 +52,12 @@ class Boards(db.Model):
     position_p1 = db.Column(db.String(2), nullable = False)
     position_p2 = db.Column(db.String(2), nullable = False)
 
-    player_1 = db.Column(Integer, ForeignKey("users.id")) # foreign key to user
-    player_2 = db.Column(Integer, ForeignKey("users.id")) # foreign key to user
+    fk_player_1 = db.Column(Integer, ForeignKey("users.id")) # foreign key to user 1
+    fk_player_2 = db.Column(Integer, ForeignKey("users.id")) # foreign key to user 2
+    fk_history = db.Column(Integer, ForeignKey("historys.id")) # foreign key to the game history
 
+class historys(db.Model):
+    __tablename__ = "historys"
 
-
-#class Position_history(db.Model):
-#    __tablename__ = "position_history"
-#    def __init__(self) -> None:
-#        pass
+    id = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    movements = db.Column(db.String(500), nullable = False)
