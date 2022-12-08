@@ -9,8 +9,9 @@ class User():
 
 class Human(User):
 
-    def __init__(self, login, password, email, name, first_name):
+    def __init__(self, login, id, password, email, name, first_name):
         super().__init__(login)
+        self.id = id
         self.password = password
         self.email = email
         self.name = name
@@ -36,9 +37,9 @@ class Board():
 
         while isinstance(self.players[self.turn - 1], AI) and not is_done:
             self.players[self.turn - 1].play(self.positions[self.turn - 1], self.state_board)
-
+            
             is_done = self.is_done()[0]
-
+    
         return self.is_done()
 
     def move_player(self, movement):
@@ -58,21 +59,25 @@ class Board():
     def get_possible_move(self, position):
         possible_move = []
         opponent_turn = 2 if self.turn == 1 else 1
-
+        actions = {}
 
         if (position[0] - 1) >= 0 and self.get_tab_state()[position[0] - 1][position[1]] != opponent_turn:
             possible_move.append([position[0] - 1, position[1]])
+            actions[str([position[0] - 1, position[1]])] = 0 #haut 
         
         if (position[1] - 1) >= 0 and self.get_tab_state()[position[0]][position[1] - 1] != opponent_turn:
             possible_move.append([position[0], position[1] - 1])
+            actions[str([position[0], position[1] - 1])] = 1 #gauche
         
         if (position[0] + 1) <= self.size-1 and self.get_tab_state()[position[0] + 1][position[1]] != opponent_turn:
             possible_move.append([position[0] + 1, position[1]])
+            actions[str([position[0] + 1, position[1]])] = 2 #bas
 
         if (position[1] + 1) <= self.size-1 and self.get_tab_state()[position[0]][position[1] + 1] != opponent_turn:
             possible_move.append([position[0], position[1] + 1])
+            actions[str([position[0], position[1] + 1])] = 3 #droite
 
-        return possible_move
+        return possible_move, actions
 
     def get_tab_state(self):
         state = []
@@ -102,6 +107,7 @@ class Board():
 
         x = self.positions[self.turn - 1][0]
         y = self.positions[self.turn - 1][1]
+        self.check_enclosure()
         if state[x][y] != opponent:
             state[x][y] = self.turn
             self.state_board = self.state_to_string(state)
@@ -137,7 +143,6 @@ class Board():
             else:
                 enclosures = enclosures + enclosure
 
-        
         
         self.update_enclosure(enclosures)
         return self.is_done()
@@ -180,7 +185,7 @@ class Board():
                 if response == 0:
                     break
 
-            return response     
+        return response     
 
 
     def get_all_neighbours(self, position):
@@ -202,7 +207,7 @@ class Board():
  
 
     def get_neutral_cases(self, position):
-        neutral_cases = self.get_possible_move(position)
+        neutral_cases, actions = self.get_possible_move(position)
 
         i = 0
         while i < len(neutral_cases):
@@ -234,3 +239,10 @@ class Board():
 def map_AI(ai):
     login = 'AI n°', ai.id
     return AI(ai.id, login)
+
+def map_Human(human):
+    login = 'Humain n°', human.id
+    return Human(login, human.id, human.password, human.email, human.name, human.first_name)
+
+def map_board(board):
+    return Board(board.id, board.size, board.fk_player_1, board.fk_player_2)

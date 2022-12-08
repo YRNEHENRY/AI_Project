@@ -1,6 +1,5 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from game_app.ai import AI
 from sqlalchemy import Column, ForeignKey, Integer, insert
 
 app = Flask(__name__)
@@ -12,6 +11,7 @@ def init_db():
     db.create_all()
 
 def insertt(test):
+    print("insert...")
     db.session.add(test)
     db.session.commit()
 
@@ -60,4 +60,6 @@ class historys(db.Model):
     __tablename__ = "historys"
 
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
-    movements = db.Column(db.String(500), nullable = False)
+    actions = db.Column(db.String(1000), nullable = False)
+    states = db.Column(db.String(1000), nullable = False)
+    positions = db.Column(db.String(1000), nullable = False)

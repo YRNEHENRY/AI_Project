@@ -2,9 +2,9 @@ from urllib import request
 from flask import Flask, render_template, request
 
 
-from game_app.models import Boards, Humans, insertt, init_db, AIs
+from game_app.models import Boards, Humans, historys, insertt, init_db, AIs, db
 from game_app.ai import AI
-from game_app.business import Human, Board, map_AI
+from game_app.business import Human, Board, map_AI, map_Human
 
 
 app = Flask(__name__)
@@ -26,13 +26,13 @@ def game():
 
 @app.route('/game/start/')
 def start():
-    player1 = Human("log1", "pssw1", "email1", "human_player1", "first_name1")
-    player2 = Human("log2", "pssw2", "email2", "human_player2", "first_name2")
+    human_aurelien = map_Human(Humans.query.get(1))
+    
 
     ai = map_AI(AIs.query.get(1))
 
 
-    board = Board(ids[0], size, player1, ai)
+    board = Board(ids[0], size, human_aurelien, ai)
     ids.remove(ids[0])
     ai.set_board(board)
     boards[board.id] = board
@@ -53,6 +53,11 @@ def move():
     if state == boards[id].state_board:
         boards[id].play()
         is_done = boards[id].check_enclosure()
+        if is_done[0]:
+            if isinstance(boards[id].player_1, AI):
+                boards[id].player_1.save()
+            if isinstance(boards[id].player_2, AI):
+                boards[id].player_2.save()
         return {"state_board" : boards[id].get_tab_state(), "turn" : boards[id].turn, "position_p1" : boards[id].positions[0], "position_p2" : boards[id].positions[1], "player1_is_AI" : isinstance(boards[id].player_1, AI), "player2_is_AI" : isinstance(boards[id].player_2, AI), "is_done" : is_done[0], "winner" : is_done[1]}
     else:
         #triche
