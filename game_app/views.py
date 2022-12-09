@@ -2,7 +2,7 @@ from urllib import request
 from flask import Flask, render_template, request
 
 
-from game_app.models import Boards, Humans, historys, insertt, init_db, AIs, db
+from game_app.models import Boards, Humans, QTableState, historys, insertt, init_db, AIs, db
 from game_app.ai import AI
 from game_app.business import Human, Board, map_AI, map_Human
 
@@ -31,12 +31,17 @@ def start():
 
     ai = map_AI(AIs.query.get(1))
 
-
+    
     board = Board(ids[0], size, human_aurelien, ai)
     ids.remove(ids[0])
     ai.set_board(board)
     boards[board.id] = board
     is_done = board.play()
+    if is_done[0]:
+            if isinstance(board.player_1, AI):
+                board.player_1.save()
+            if isinstance(board.player_2, AI):
+                board.player_2.save()
     return {"id_board" : board.id, "state_board" : board.get_tab_state(), "turn" : board.turn, "position_p1" : board.positions[0], "position_p2" : board.positions[1], "player1_is_AI" : isinstance(board.player_1, AI), "player2_is_AI" : isinstance(board.player_2, AI), "is_done" : is_done[0], "winner" : is_done[1], 'size' : board.size}
 
 
@@ -58,6 +63,7 @@ def move():
                 boards[id].player_1.save()
             if isinstance(boards[id].player_2, AI):
                 boards[id].player_2.save()
+
         return {"state_board" : boards[id].get_tab_state(), "turn" : boards[id].turn, "position_p1" : boards[id].positions[0], "position_p2" : boards[id].positions[1], "player1_is_AI" : isinstance(boards[id].player_1, AI), "player2_is_AI" : isinstance(boards[id].player_2, AI), "is_done" : is_done[0], "winner" : is_done[1]}
     else:
         #triche

@@ -36,7 +36,7 @@ class Board():
         is_done = self.is_done()[0]
 
         while isinstance(self.players[self.turn - 1], AI) and not is_done:
-            self.players[self.turn - 1].play(self.positions[self.turn - 1], self.state_board)
+            self.players[self.turn - 1].get_move(self.positions[self.turn - 1], self.state_board)
             
             is_done = self.is_done()[0]
     
@@ -234,6 +234,23 @@ class Board():
         elif nb_1 < nb_2:
             winner = self.player_2.first_name if not isinstance(self.player_2, AI) else "AI n°2"
         return is_done, winner
+
+    
+    def get_rewards(self):
+        opponent = 2 if self.turn == 1 else 1
+        rewards = {}
+        rewards["0"] = 0
+        rewards["1"] = 0
+        rewards["2"] = 0
+        rewards["3"] = 0
+        pos = self.positions[0] if self.turn == 1 else self.positions[1]
+        possible_move, actions = self.get_possible_move(pos)
+        for move in possible_move:
+            action = actions[str(move)]
+            if self.get_tab_state()[move[0]][move[1]] == 0:
+                rewards[str(action)] = 1 
+
+        return rewards
 
 
 def map_AI(ai):

@@ -11,7 +11,7 @@ def init_db():
     db.create_all()
 
 def insertt(test):
-    print("insert...")
+
     db.session.add(test)
     db.session.commit()
 
@@ -63,3 +63,13 @@ class historys(db.Model):
     actions = db.Column(db.String(1000), nullable = False)
     states = db.Column(db.String(1000), nullable = False)
     positions = db.Column(db.String(1000), nullable = False)
+
+
+class QTableState(db.Model):
+    #16 chiffres pour board (4x4) + 4 chiffres pour pos joueurs + 1 chiffres (1 ou 2) pour turn
+	state = db.Column(db.String(30), primary_key = True)
+	left_score = db.Column(db.Integer, default=0)
+	right_score = db.Column(db.Integer, default=0)
+	up_score = db.Column(db.Integer, default=0)
+	down_score = db.Column(db.Integer, default=0)
+    
