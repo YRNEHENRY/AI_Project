@@ -42,7 +42,7 @@ class AI ():
         state_id = state + str(pos1[0]) + str(pos1[1]) + str(pos2[0]) + str(pos2[1]) + str(self.board.turn)
         action = [0,0]
         qtable = QTableState.query.get(state_id)
-        if qtable == None:
+        if qtable == None or qtable.up_score == 0 and qtable.left_score == 0 and qtable.down_score == 0 and qtable.right_score == 0:
             return self.exploration_step(position)
         else:
             index = [qtable.up_score, qtable.left_score, qtable.down_score, qtable.right_score].index(max([qtable.up_score, qtable.left_score, qtable.down_score, qtable.right_score]))
@@ -84,7 +84,6 @@ class AI ():
             action, old_state, old_position, rewards = self.exploration_step(position)
         else:
             action, old_state, old_position, rewards = self.greedy_step(state, position)
-
 
         self.update_Qtable(rewards, old_state, action, old_position, turn, pos_opponent, self.board.state_board)
         self.history_actions = self.history_actions + str(action)

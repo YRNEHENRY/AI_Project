@@ -37,7 +37,6 @@ class Board():
 
         while isinstance(self.players[self.turn - 1], AI) and not is_done:
             self.players[self.turn - 1].get_move(self.positions[self.turn - 1], self.state_board)
-            
             is_done = self.is_done()[0]
     
         return self.is_done()
@@ -107,7 +106,6 @@ class Board():
 
         x = self.positions[self.turn - 1][0]
         y = self.positions[self.turn - 1][1]
-        self.check_enclosure()
         if state[x][y] != opponent:
             state[x][y] = self.turn
             self.state_board = self.state_to_string(state)
@@ -145,7 +143,7 @@ class Board():
 
         
         self.update_enclosure(enclosures)
-        return self.is_done()
+        
         
 
 

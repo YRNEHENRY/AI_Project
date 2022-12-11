@@ -14,7 +14,7 @@ size = 4
 #dico temporaire en attendant l'accès à la DB
 boards = {}
 #temporaire avant accès à la DB
-ids = list(range(1, 100))
+ids = list(range(1, 10000))
 
 @app.route('/')
 def index():
@@ -30,9 +30,8 @@ def start():
     
 
     ai = map_AI(AIs.query.get(1))
-
-    
     board = Board(ids[0], size, human_aurelien, ai)
+
     ids.remove(ids[0])
     ai.set_board(board)
     boards[board.id] = board
@@ -54,10 +53,15 @@ def move():
     turn = int(parameter[2])
     state = ''.join(parameter[3].split(","))
     boards[id].move_player(move)
-
     if state == boards[id].state_board:
         boards[id].play()
-        is_done = boards[id].check_enclosure()
+        boards[id].check_enclosure()
+        is_done = boards[id].is_done()
+        boards[id].turn = 2 if boards[id].turn == 1 else 1
+        boards[id].check_enclosure()
+        if not boards[id].is_done()[0]:
+            boards[id].turn = 2 if boards[id].turn == 1 else 1
+        is_done = boards[id].is_done()
         if is_done[0]:
             if isinstance(boards[id].player_1, AI):
                 boards[id].player_1.save()
