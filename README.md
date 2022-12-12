@@ -57,3 +57,8 @@ In the `game_app` folder, We have 3 possibilities :
 ### Review 13/11/22 : Enclos :
 - Ca marche :)
 - on discute de la gestion du mouvement demain.
+
+
+### Review IA: 12/12/22
+ - Ok en gros 
+ - En attendant le résultat d'execution pour voir si la q-table est bien complétée et que vous aurez un équilibre entre exploration/ exploitation
