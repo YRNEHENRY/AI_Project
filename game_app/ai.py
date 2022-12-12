@@ -47,20 +47,26 @@ class AI ():
         
 
         if qtable == None or (qtable.up_score == 0 and qtable.left_score == 0 and qtable.down_score == 0 and qtable.right_score == 0):
+            #print("explo")
             return self.exploration_step(position)
         else:
+            #print("greed")
             moves = []
             scores = []
             if 0 in list(actions.values()):
+                #print(qtable.up_score)
                 scores.append(qtable.up_score)
                 moves.append(0)
             if 1 in list(actions.values()):
+                #print(qtable.left_score)
                 scores.append(qtable.left_score)
                 moves.append(1)
             if 2 in list(actions.values()):
+                #print(qtable.down_score)
                 scores.append(qtable.down_score)
                 moves.append(2)
             if 3 in list(actions.values()):
+                #print(qtable.right_score)
                 scores.append(qtable.right_score)
                 moves.append(3)
             
@@ -115,7 +121,6 @@ class AI ():
 
             old_state = historys.query.get((self.board.id, self.board.nb_turn - 2))
             self.update_Qtable(old_state, action, pos1, turn, pos2, actual_state)
-
         self.board.save_history(str(action), actual_state, pos1, pos2)
 
         
@@ -145,17 +150,18 @@ class AI ():
 
 
         score_p1 = max([qtablep1.down_score, qtablep1.up_score, qtablep1.left_score, qtablep1.right_score])
+
         #UP
         if action == 0:
-            qtable.up_score = qtable.up_score + 0.9 * (reward + 0.9 * score_p1 - qtable.up_score)
+            qtable.up_score = qtable.up_score + 0.1 * (reward + 0.9 * score_p1 - qtable.up_score)
         #LEFT
         elif action == 1:
-            qtable.left_score = qtable.left_score + 0.9 * (reward + 0.9 * score_p1 - qtable.left_score)
+            qtable.left_score = qtable.left_score + 0.1 * (reward + 0.9 * score_p1 - qtable.left_score)
         #DOWN
         elif action == 2:
-            qtable.down_score = qtable.down_score + 0.9 * (reward + 0.9 * score_p1 - qtable.down_score)
+            qtable.down_score = qtable.down_score + 0.1 * (reward + 0.9 * score_p1 - qtable.down_score)
         #RIGHT
         elif action == 3:
-            qtable.right_score = qtable.right_score + 0.9 * (reward + 0.9 * score_p1 - qtable.right_score)
+            qtable.right_score = qtable.right_score + 0.1 * (reward + 0.9 * score_p1 - qtable.right_score)
 
         db.session.commit()
