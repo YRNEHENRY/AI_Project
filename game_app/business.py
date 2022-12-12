@@ -1,4 +1,5 @@
 from game_app.ai import AI
+from game_app.models import historys, insertt
 
 
 class User():
@@ -31,6 +32,7 @@ class Board():
         self.player_1 = player_1
         self.player_2 = player_2
         self.players = [player_1, player_2]
+        self.nb_turn = 1
 
     def play(self):
         is_done = self.is_done()[0]
@@ -38,21 +40,28 @@ class Board():
         while isinstance(self.players[self.turn - 1], AI) and not is_done:
             self.players[self.turn - 1].get_move(self.positions[self.turn - 1], self.state_board)
             is_done = self.is_done()[0]
+            self.nb_turn += 1
     
         return self.is_done()
 
     def move_player(self, movement):
-
+        action = ""
         if movement == "UP":
             self.positions[self.turn - 1][0] -= 1
+            action = "0"
         elif movement == "DOWN":
             self.positions[self.turn - 1][0] += 1
+            action = "2"
         elif movement == "LEFT":
             self.positions[self.turn - 1][1] -= 1
+            action = "1"
         elif movement == "RIGHT":
             self.positions[self.turn - 1][1] += 1
+            action = "3"
 
         self.update_state()
+        self.save_history(action)
+        self.nb_turn += 1
         return self.is_done()
 
     def get_possible_move(self, position):
@@ -103,7 +112,7 @@ class Board():
     def update_state(self):
         state = self.get_tab_state()
         opponent = 2 if self.turn == 1 else 1
-
+        #self.save_state()
         x = self.positions[self.turn - 1][0]
         y = self.positions[self.turn - 1][1]
         if state[x][y] != opponent:
@@ -234,21 +243,17 @@ class Board():
         return is_done, winner
 
     
-    def get_rewards(self):
-        opponent = 2 if self.turn == 1 else 1
-        rewards = {}
-        rewards["0"] = 0
-        rewards["1"] = 0
-        rewards["2"] = 0
-        rewards["3"] = 0
-        pos = self.positions[0] if self.turn == 1 else self.positions[1]
-        possible_move, actions = self.get_possible_move(pos)
-        for move in possible_move:
-            action = actions[str(move)]
-            if self.get_tab_state()[move[0]][move[1]] == 0:
-                rewards[str(action)] = 1 
+    def get_reward(self, state, statep1, current_player):
+        reward1 = statep1.count("1") - state.count("2")
+        reward2 = statep1.count("2") - state.count("1")
+        return reward1 - reward2 if current_player == 1 else reward2 - reward1
 
-        return rewards
+    def save_history(self, action):
+        pos_1 = str(self.positions[0][0]) + str(self.positions[0][1])
+        pos_2 = str(self.positions[1][0]) + str(self.positions[1][1])
+        insertt(historys(id = self.id, nb_turn = self.nb_turn, action = action, state = self.state_board, position_1 = pos_1, position_2 = pos_2))
+
+
 
 
 def map_AI(ai):
@@ -259,5 +264,5 @@ def map_Human(human):
     login = 'Humain n°', human.id
     return Human(login, human.id, human.password, human.email, human.name, human.first_name)
 
-def map_board(board):
-    return Board(board.id, board.size, board.fk_player_1, board.fk_player_2)
+def map_board(board, p1, p2):
+    return Board(board.id, board.size, p1, p2)

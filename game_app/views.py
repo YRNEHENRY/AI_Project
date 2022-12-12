@@ -4,20 +4,20 @@ from flask import Flask, render_template, request
 
 from game_app.models import Boards, Humans, QTableState, historys, insertt, init_db, AIs, db
 from game_app.ai import AI
-from game_app.business import Human, Board, map_AI, map_Human
+from game_app.business import Human, Board, map_AI, map_Human, map_board
 
 
 app = Flask(__name__)
 app.config.from_object('config')
 size = 4
 
-#dico temporaire en attendant l'accès à la DB
+
 boards = {}
-#temporaire avant accès à la DB
-ids = list(range(1, 10000))
+
 
 @app.route('/')
 def index():
+    insertt(AIs())
     return render_template('index.html', size = size)
 
 @app.route('/game/')
@@ -28,19 +28,24 @@ def game():
 def start():
     human_aurelien = map_Human(Humans.query.get(1))
     
-
     ai = map_AI(AIs.query.get(1))
-    board = Board(ids[0], size, human_aurelien, ai)
+    ai2 = map_AI(AIs.query.get(2))
 
-    ids.remove(ids[0])
+
+
+    new_board = Boards(size = size, fk_player_1 = Humans.query.get(1).id, fk_player_2 = AIs.query.get(1).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
+    #new_board = Boards(size = size, fk_player_1 = AIs.query.get(1).id, fk_player_2 = AIs.query.get(2).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
+
+    insertt(new_board)
+
+    board = map_board(new_board, human_aurelien, ai)
+    #ai.eps = 0.50
+    #ai2.eps = 0.50
     ai.set_board(board)
+    ai2.set_board(board)
     boards[board.id] = board
     is_done = board.play()
-    if is_done[0]:
-            if isinstance(board.player_1, AI):
-                board.player_1.save()
-            if isinstance(board.player_2, AI):
-                board.player_2.save()
+
     return {"id_board" : board.id, "state_board" : board.get_tab_state(), "turn" : board.turn, "position_p1" : board.positions[0], "position_p2" : board.positions[1], "player1_is_AI" : isinstance(board.player_1, AI), "player2_is_AI" : isinstance(board.player_2, AI), "is_done" : is_done[0], "winner" : is_done[1], 'size' : board.size}
 
 
@@ -62,11 +67,6 @@ def move():
         if not boards[id].is_done()[0]:
             boards[id].turn = 2 if boards[id].turn == 1 else 1
         is_done = boards[id].is_done()
-        if is_done[0]:
-            if isinstance(boards[id].player_1, AI):
-                boards[id].player_1.save()
-            if isinstance(boards[id].player_2, AI):
-                boards[id].player_2.save()
 
         return {"state_board" : boards[id].get_tab_state(), "turn" : boards[id].turn, "position_p1" : boards[id].positions[0], "position_p2" : boards[id].positions[1], "player1_is_AI" : isinstance(boards[id].player_1, AI), "player2_is_AI" : isinstance(boards[id].player_2, AI), "is_done" : is_done[0], "winner" : is_done[1]}
     else:

@@ -54,15 +54,16 @@ class Boards(db.Model):
 
     fk_player_1 = db.Column(Integer, ForeignKey("users.id")) # foreign key to user 1
     fk_player_2 = db.Column(Integer, ForeignKey("users.id")) # foreign key to user 2
-    fk_history = db.Column(Integer, ForeignKey("historys.id")) # foreign key to the game history
 
 class historys(db.Model):
     __tablename__ = "historys"
 
-    id = db.Column(db.Integer, primary_key = True, autoincrement = True)
-    actions = db.Column(db.String(1000), nullable = False)
-    states = db.Column(db.String(1000), nullable = False)
-    positions = db.Column(db.String(1000), nullable = False)
+    id = db.Column(db.Integer, primary_key = True)
+    nb_turn = db.Column(db.Integer, nullable = False, primary_key = True)
+    action = db.Column(db.String(2), nullable = False)
+    state = db.Column(db.String(50), nullable = False)
+    position_1 = db.Column(db.String(4), nullable = False)
+    position_2 = db.Column(db.String(4), nullable = False)
 
 
 class QTableState(db.Model):
