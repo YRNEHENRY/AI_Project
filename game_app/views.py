@@ -17,6 +17,9 @@ boards = {}
 
 @app.route('/')
 def index():
+    init_db()
+    insertt(Humans(password = "pws", email = "aure.somme@hotmail.com", name = "Somme", first_name = "Aurélien"))
+    insertt(AIs())
     insertt(AIs())
     return render_template('index.html', size = size)
 
@@ -33,11 +36,12 @@ def start():
 
 
 
+    
     new_board = Boards(size = size, fk_player_1 = Humans.query.get(1).id, fk_player_2 = AIs.query.get(1).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
     #new_board = Boards(size = size, fk_player_1 = AIs.query.get(1).id, fk_player_2 = AIs.query.get(2).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
 
     insertt(new_board)
-
+    
     board = map_board(new_board, human_aurelien, ai)
     #ai.eps = 0.50
     #ai2.eps = 0.50
@@ -72,6 +76,34 @@ def move():
     else:
         #triche
         return {"state_board" : boards[id].get_tab_state(), "turn" : boards[id].turn, "position_p1" : [-1,-1], "position_p2" : [-1,-1], "player1_is_AI" : isinstance(boards[id].player_1, AI), "player2_is_AI" : isinstance(boards[id].player_2, AI), "is_done" : is_done[0], "winner" : is_done[1]}
+
+
+
+
+@app.route('/train/')
+def train():
+    return render_template('train.html')
+
+@app.route('/train/ai/')
+def train_ai():
+    ai = map_AI(AIs.query.get(1))
+    ai2 = map_AI(AIs.query.get(2))
+    for i in range(1, 500):
+        print(i)
+        new_board = Boards(size = size, fk_player_1 = AIs.query.get(1).id, fk_player_2 = AIs.query.get(2).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
+
+        insertt(new_board)
+    
+        board = map_board(new_board, ai2, ai)
+        ai.eps = 0.50
+        ai2.eps = 0.50
+        ai.set_board(board)
+        ai2.set_board(board)
+        boards[board.id] = board
+        is_done = board.play()
+
+    return {"id_done" : True}
+
 
 
 

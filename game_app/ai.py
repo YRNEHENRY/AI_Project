@@ -35,35 +35,62 @@ class AI ():
         moves, actions = self.board.get_possible_move(position)
     
         pos_opponent = self.board.positions[0] if self.board.turn == 2 else self.board.positions[1]
-        pos1 = position if self.board.turn == 1 else pos_opponent
-        pos2 = position if self.board.turn == 2 else pos_opponent
+        pos1 = self.board.positions[0]
+        pos2 = self.board.positions[1]
+
+
         state_id = state + str(pos1[0]) + str(pos1[1]) + str(pos2[0]) + str(pos2[1]) + str(self.board.turn)
+
         action = [0,0]
         qtable = QTableState.query.get(state_id)
+
+        
 
         if qtable == None or (qtable.up_score == 0 and qtable.left_score == 0 and qtable.down_score == 0 and qtable.right_score == 0):
             return self.exploration_step(position)
         else:
-            index = [qtable.up_score, qtable.left_score, qtable.down_score, qtable.right_score].index(max([qtable.up_score, qtable.left_score, qtable.down_score, qtable.right_score]))
+
+            moves = []
+            scores = []
+            if 0 in list(actions.values()):
+                scores.append(qtable.up_score)
+                moves.append(0)
+            if 1 in list(actions.values()):
+                scores.append(qtable.left_score)
+                moves.append(1)
+            if 2 in list(actions.values()):
+                scores.append(qtable.down_score)
+                moves.append(2)
+            if 3 in list(actions.values()):
+                scores.append(qtable.right_score)
+                moves.append(3)
+            
+
+            index = scores.index(max(scores))
+            move = moves[index]
+
             pos = self.board.positions[self.board.turn - 1]
-            if index == 0:
+
+
+
+            if move == 0:
                 pos[0] = pos[0] - 1
                 self.board.positions[self.board.turn - 1] = pos
                 action = pos
 
-            elif index == 1:
+            elif move == 1:
 
                 pos[1] = pos[1] - 1
                 self.board.positions[self.board.turn - 1] = pos
                 action = pos
 
-            elif index == 2:
+            elif move == 2:
                 pos[0] = pos[0] + 1
 
                 self.board.positions[self.board.turn - 1] = pos
                 action = pos
 
-            elif index == 3:
+            elif move == 3:
                 pos[1] = pos[1] + 1
                 self.board.positions[self.board.turn - 1] = pos
                 action = pos
@@ -80,16 +107,17 @@ class AI ():
         action = {}
         old_state = ""
         turn = self.board.turn
-        if False:
+        if random.uniform(0, 1) < self.eps:
             action, old_state, old_position = self.exploration_step(position)
         else:
-            action, old_state, old_position = self.greedy_step(state, position)
+            action, old_state, old_position = self.greedy_step(actual_state, position)
 
         if self.board.nb_turn > 2:
+
             old_state = historys.query.get((self.board.id, self.board.nb_turn - 2))
             self.update_Qtable(old_state, action, pos1, turn, pos2, actual_state)
 
-        self.board.save_history(str(action))
+        self.board.save_history(str(action), actual_state, pos1, pos2)
 
         
 
@@ -101,6 +129,8 @@ class AI ():
         turnp1 = "2" if (state.nb_turn % 2 == 0) else "1"
 
         state_id = state.state + state.position_1 + state.position_2 + turnp1
+
+
 
         reward = self.board.get_reward(state.state, statep1, turn)
 
@@ -114,17 +144,19 @@ class AI ():
             insertt(QTableState(state = statep1_id))
             qtablep1 = QTableState.query.get(statep1_id)
 
+
+        score_p1 = max([qtablep1.down_score, qtablep1.up_score, qtablep1.left_score, qtablep1.right_score])
         #UP
         if action == 0:
-            qtable.up_score = qtable.up_score + 0.1 * (reward + 0.9 * qtablep1.up_score - qtable.up_score)
+            qtable.up_score = qtable.up_score + 0.9 * (reward + 0.9 * score_p1 - qtable.up_score)
         #LEFT
         elif action == 1:
-            qtable.left_score = qtable.left_score + 0.1 * (reward + 0.9 * qtablep1.left_score - qtable.left_score)
+            qtable.left_score = qtable.left_score + 0.9 * (reward + 0.9 * score_p1 - qtable.left_score)
         #DOWN
         elif action == 2:
-            qtable.down_score = qtable.down_score + 0.1 * (reward + 0.9 * qtablep1.down_score - qtable.down_score)
+            qtable.down_score = qtable.down_score + 0.9 * (reward + 0.9 * score_p1 - qtable.down_score)
         #RIGHT
         elif action == 3:
-            qtable.right_score = qtable.right_score + 0.1 * (reward + 0.9 * qtablep1.right_score - qtable.right_score)
+            qtable.right_score = qtable.right_score + 0.9 * (reward + 0.9 * score_p1 - qtable.right_score)
 
         db.session.commit()

@@ -160,3 +160,9 @@ function refreshGrid(){
         table.children[player_2.position[0]].children[player_2.position[1]].children[0].innerHTML = player_2.icon
 
 }
+
+function train(){
+        fetch('/train/ai/').then(response => response.json()).then(async function(data){
+                alert("Fin du training")
+        })
+}
