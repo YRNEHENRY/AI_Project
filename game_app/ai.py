@@ -49,7 +49,6 @@ class AI ():
         if qtable == None or (qtable.up_score == 0 and qtable.left_score == 0 and qtable.down_score == 0 and qtable.right_score == 0):
             return self.exploration_step(position)
         else:
-
             moves = []
             scores = []
             if 0 in list(actions.values()):
@@ -107,7 +106,7 @@ class AI ():
         action = {}
         old_state = ""
         turn = self.board.turn
-        if random.uniform(0, 1) < self.eps:
+        if random.uniform(0, 1) > self.eps:
             action, old_state, old_position = self.exploration_step(position)
         else:
             action, old_state, old_position = self.greedy_step(actual_state, position)

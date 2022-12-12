@@ -17,10 +17,6 @@ boards = {}
 
 @app.route('/')
 def index():
-    init_db()
-    insertt(Humans(password = "pws", email = "aure.somme@hotmail.com", name = "Somme", first_name = "Aurélien"))
-    insertt(AIs())
-    insertt(AIs())
     return render_template('index.html', size = size)
 
 @app.route('/game/')
@@ -38,13 +34,11 @@ def start():
 
     
     new_board = Boards(size = size, fk_player_1 = Humans.query.get(1).id, fk_player_2 = AIs.query.get(1).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
-    #new_board = Boards(size = size, fk_player_1 = AIs.query.get(1).id, fk_player_2 = AIs.query.get(2).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
 
     insertt(new_board)
     
     board = map_board(new_board, human_aurelien, ai)
-    #ai.eps = 0.50
-    #ai2.eps = 0.50
+
     ai.set_board(board)
     ai2.set_board(board)
     boards[board.id] = board
@@ -88,7 +82,7 @@ def train():
 def train_ai():
     ai = map_AI(AIs.query.get(1))
     ai2 = map_AI(AIs.query.get(2))
-    for i in range(1, 500):
+    for i in range(1, 1000):
         print(i)
         new_board = Boards(size = size, fk_player_1 = AIs.query.get(1).id, fk_player_2 = AIs.query.get(2).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
 
