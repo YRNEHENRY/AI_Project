@@ -1,5 +1,5 @@
 from game_app.ai import AI
-from game_app.models import historys, insertt, db
+from game_app.models import historys, insert
 
 
 class User():
@@ -41,12 +41,8 @@ class Board():
             self.players[self.turn - 1].get_move(self.positions[self.turn - 1], self.state_board)
             is_done = self.is_done()[0]
             self.nb_turn += 1
+    
         return self.is_done()
-
-    def delete_history(self):
-        for i in range(1, self.nb_turn + 1):
-            historys.query.filter_by(id=self.id, nb_turn = i).delete()
-            db.session.commit()
 
     def move_player(self, movement):
         action = ""
@@ -252,12 +248,10 @@ class Board():
         reward2 = statep1.count("2") - state.count("1")
         return reward1 - reward2 if current_player == 1 else reward2 - reward1
 
-    
-
     def save_history(self, action, state, pos1, pos2):
         pos_1 = str(pos1[0]) + str(pos1[1])
         pos_2 = str(pos2[0]) + str(pos2[1])
-        insertt(historys(id = self.id, nb_turn = self.nb_turn, action = action, state = state, position_1 = pos_1, position_2 = pos_2))
+        insert(historys(id = self.id, nb_turn = self.nb_turn, action = action, state = state, position_1 = pos_1, position_2 = pos_2))
 
 
 
