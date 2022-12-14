@@ -16,9 +16,15 @@ class AI ():
         self.history_positions = ""
 
     def set_board(self, board):
+        """
+            Set an object Board business
+        """
         self.board = board
 
     def exploration_step(self, position):
+        """
+            Exploration method to play (random choice)
+        """
         old_position = position
         old_state = self.board.state_board
         possible_move, actions = self.board.get_possible_move(position)
@@ -30,6 +36,9 @@ class AI ():
 
 
     def greedy_step(self, state, position):
+        """
+            Greedy step method to play (choose the best possible choice based on QTable)
+        """
         old_position = position
         old_state = self.board.state_board
         moves, actions = self.board.get_possible_move(position)
@@ -106,6 +115,9 @@ class AI ():
 
     
     def get_move(self, position, state):
+        """
+            Get a move base on epsilon (exploration or greedy) then update the QTable and the state of the board
+        """
         actual_state = self.board.state_board
         pos1 = self.board.positions[0]
         pos2 = self.board.positions[1]
@@ -126,6 +138,9 @@ class AI ():
         
 
     def update_Qtable(self, state, action, pos1, turn, pos2, statep1):
+        """
+            Update the state values from a QTable
+        """
 
         
         statep1_id = statep1 + str(pos1[0]) + str(pos1[1]) + str(pos2[0]) + str(pos2[1]) + str(turn)

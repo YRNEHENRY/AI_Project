@@ -34,7 +34,11 @@ class Board():
         self.players = [player_1, player_2]
         self.nb_turn = 1
 
+    
     def play(self):
+        """
+            Play the ais until the turn of an human player or until the end and return (if the game is done, winner)
+        """
         is_done = self.is_done()[0]
 
         while isinstance(self.players[self.turn - 1], AI) and not is_done:
@@ -44,11 +48,17 @@ class Board():
         return self.is_done()
 
     def delete_history(self):
+        """
+            Delete all historys of this board
+        """
         for i in range(1, self.nb_turn + 1):
             historys.query.filter_by(id=self.id, nb_turn = i).delete()
             db.session.commit()
 
     def move_player(self, movement):
+        """
+            Move the current player and return (if the game is done, winner)
+        """
         action = ""
         if movement == "UP":
             self.positions[self.turn - 1][0] -= 1
@@ -69,6 +79,9 @@ class Board():
         return self.is_done()
 
     def get_possible_move(self, position):
+        """
+            Return the possible move of a position
+        """
         possible_move = []
         opponent_turn = 2 if self.turn == 1 else 1
         actions = {}
@@ -92,6 +105,9 @@ class Board():
         return possible_move, actions
 
     def get_tab_state(self):
+        """
+            Return the state of the board (string type) in array type [][]
+        """
         state = []
         i = 0
         for y in range(0, self.size):
@@ -103,6 +119,9 @@ class Board():
         return state
 
     def state_to_string(self, state):
+        """
+            Return the state in string from state in array [][]
+        """
         str_sate = ''
         for line in state:
             for s in line:
@@ -114,6 +133,9 @@ class Board():
 
 
     def update_state(self):
+        """
+            Update the state of the board with the new positions of players then change the turn
+        """
         state = self.get_tab_state()
         opponent = 2 if self.turn == 1 else 1
         #self.save_state()
@@ -124,11 +146,14 @@ class Board():
             self.state_board = self.state_to_string(state)
             self.turn = 2 if self.turn == 1 else 1
         else:
-            #triche
+            #cheat
             self.state_board = "0" + "0"*((self.size * self.size) - 2) + "0"
         
 
     def update_enclosure(self, enclosure):
+        """
+            Update the state of the board with possible enclosure
+        """
         x = 0
         y = 0
         state = self.get_tab_state()
@@ -143,6 +168,9 @@ class Board():
 
 
     def check_enclosure(self):
+        """
+            Check if there is enclosure in the state then update it
+        """
         neutral_cases = self.get_neutral_cases(self.positions[self.turn - 1])
         enclosures = []
         enclosure = []
@@ -164,7 +192,10 @@ class Board():
 
         
     def check_neighbour(self, enclosure, position):
-
+        """
+            Check all neighbours from a position (position of neighbour from an other case), return 0 if the enclosure if
+            not correct
+        """
 
         opponent = 2 if self.turn == 1 else 1
         
@@ -200,6 +231,9 @@ class Board():
 
 
     def get_all_neighbours(self, position):
+        """
+            Return all neighbours from a case
+        """
         neighbours = []
 
         if (position[0] - 1) >= 0:
@@ -218,6 +252,9 @@ class Board():
  
 
     def get_neutral_cases(self, position):
+        """
+            Return all neutral cases from a case
+        """
         neutral_cases, actions = self.get_possible_move(position)
 
         i = 0
@@ -231,6 +268,9 @@ class Board():
         
 
     def is_done(self):
+        """
+            Return if the game is done, and the possible winner if the game is win
+        """
         is_done = False
         winner = "Nobody"
         for i in range(0, self.size):
@@ -248,6 +288,9 @@ class Board():
 
     
     def get_reward(self, state, statep1, current_player):
+        """
+            Return the reward of the current player
+        """
         reward1 = statep1.count("1") - state.count("2")
         reward2 = statep1.count("2") - state.count("1")
         return reward1 - reward2 if current_player == 1 else reward2 - reward1
@@ -255,6 +298,9 @@ class Board():
     
 
     def save_history(self, action, state, pos1, pos2):
+        """
+            Save the history into the DB
+        """
         pos_1 = str(pos1[0]) + str(pos1[1])
         pos_2 = str(pos2[0]) + str(pos2[1])
         insertt(historys(id = self.id, nb_turn = self.nb_turn, action = action, state = state, position_1 = pos_1, position_2 = pos_2))
@@ -263,12 +309,21 @@ class Board():
 
 
 def map_AI(ai):
+    """
+        Change model AIs to business AI
+    """
     login = 'AI n°', ai.id
     return AI(ai.id, login)
 
 def map_Human(human):
+    """
+        Change model Humans to business Human
+    """
     login = 'Humain n°', human.id
     return Human(login, human.id, human.password, human.email, human.name, human.first_name)
 
 def map_board(board, p1, p2):
+    """
+        Change model Boards to business Board
+    """
     return Board(board.id, board.size, p1, p2)

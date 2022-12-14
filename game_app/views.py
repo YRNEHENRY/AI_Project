@@ -88,6 +88,7 @@ def train_ai():
     ai = map_AI(AIs.query.get(1))
     ai2 = map_AI(AIs.query.get(2))
     for i in range(1, 500):
+        print(i)
         new_board = Boards(size = size, fk_player_1 = AIs.query.get(1).id, fk_player_2 = AIs.query.get(2).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
 
         insertt(new_board)
