@@ -1,6 +1,6 @@
 import random
 
-from game_app.models import QTableState, historys, insertt, db
+from game_app.models import QTableState, historys, insert, db
 
 
 
@@ -9,7 +9,7 @@ class AI ():
     def __init__(self, id, login):
         self.login = login
         self.id = id
-        self.eps = 0.95
+        self.eps = 0.1
         self.Q_table = {}
         self.history_actions = ""
         self.history_states = ""
@@ -140,12 +140,12 @@ class AI ():
 
         qtable = QTableState.query.get(state_id)
         if qtable == None:
-            insertt(QTableState(state = state_id))
+            insert(QTableState(state = state_id))
             qtable = QTableState.query.get(state_id)
 
         qtablep1 = QTableState.query.get(statep1_id)
         if qtablep1 == None:
-            insertt(QTableState(state = statep1_id))
+            insert(QTableState(state = statep1_id))
             qtablep1 = QTableState.query.get(statep1_id)
 
 
@@ -153,15 +153,15 @@ class AI ():
 
         #UP
         if action == 0:
-            qtable.up_score = qtable.up_score + 0.1 * (reward + 0.9 * score_p1 - qtable.up_score)
+            qtable.up_score = qtable.up_score + 0.1 * (reward + 0.75 * score_p1 - qtable.up_score)
         #LEFT
         elif action == 1:
-            qtable.left_score = qtable.left_score + 0.1 * (reward + 0.9 * score_p1 - qtable.left_score)
+            qtable.left_score = qtable.left_score + 0.1 * (reward + 0.75 * score_p1 - qtable.left_score)
         #DOWN
         elif action == 2:
-            qtable.down_score = qtable.down_score + 0.1 * (reward + 0.9 * score_p1 - qtable.down_score)
+            qtable.down_score = qtable.down_score + 0.1 * (reward + 0.75 * score_p1 - qtable.down_score)
         #RIGHT
         elif action == 3:
-            qtable.right_score = qtable.right_score + 0.1 * (reward + 0.9 * score_p1 - qtable.right_score)
+            qtable.right_score = qtable.right_score + 0.1 * (reward + 0.75 * score_p1 - qtable.right_score)
 
         db.session.commit()

@@ -2,7 +2,7 @@ from urllib import request
 from flask import Flask, render_template, request, jsonify
 
 
-from game_app.models import Boards, Humans, QTableState, historys, insertt, init_db, AIs, db
+from game_app.models import Boards, Humans, QTableState, historys, insert, init_db, AIs, db
 from game_app.ai import AI
 from game_app.business import Human, Board, map_AI, map_Human, map_board
 
@@ -17,6 +17,15 @@ boards = {}
 
 @app.route('/')
 def index():
+    """
+    init_db()
+    insert(Humans(password = "AurelienEstUnIdiot", email = "darksasuke69@yahoo.fr", name = "Giri", first_name = "Oni"))
+    insert(AIs())
+    insert(AIs())
+    print(Humans.query.all())
+    print(AIs.query.all())
+    """
+    
     return render_template('index.html', size = size)
 
 @app.route('/game/')
@@ -35,7 +44,7 @@ def start():
     
     new_board = Boards(size = size, fk_player_1 = Humans.query.get(1).id, fk_player_2 = AIs.query.get(1).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
 
-    insertt(new_board)
+    insert(new_board)
     
     board = map_board(new_board, human_aurelien, ai)
 
@@ -84,11 +93,11 @@ def train():
 def train_ai():
     ai = map_AI(AIs.query.get(1))
     ai2 = map_AI(AIs.query.get(2))
-    for i in range(1, 500):
+    for i in range(1, 20000):
         print(i)
         new_board = Boards(size = size, fk_player_1 = AIs.query.get(1).id, fk_player_2 = AIs.query.get(2).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
 
-        insertt(new_board)
+        insert(new_board)
     
         board = map_board(new_board, ai2, ai)
         ai.eps = 0.10
