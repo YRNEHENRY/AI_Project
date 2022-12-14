@@ -68,7 +68,7 @@ class historys(db.Model):
 
 class QTableState(db.Model):
     #16 chiffres pour board (4x4) + 4 chiffres pour pos joueurs + 1 chiffres (1 ou 2) pour turn
-	state = db.Column(db.String(30), primary_key = True)
+	state = db.Column(db.String(21), primary_key = True)
 	left_score = db.Column(db.Integer, default=0)
 	right_score = db.Column(db.Integer, default=0)
 	up_score = db.Column(db.Integer, default=0)
