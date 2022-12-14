@@ -46,7 +46,7 @@ function turnGame(){
 }
 
 
-function move(x, y){
+async function move(x, y){
         let move = [x,y]
 
         if (move[0] < players[turn - 1].position[0]){
@@ -66,13 +66,19 @@ function move(x, y){
                 players[turn-1].position[1] += 1
         }
         updateState(movement)
-        parameter = movement + "|" + idBoard + "|" + turn + "|" + state_board
-        fetch("/game/move?movement=" + parameter, {
-                method : "GET",
-                headers : {"Content-Type": "application/json"},
-                
-        }).then(response => response.json()).then(async function(data){
-                turn = data['turn']
+
+        url = '/game/move/'
+
+        const reponse = await fetch(url, {
+                method: 'POST',
+                headers:{
+                        'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({move : movement,idBoard: idBoard,turn: turn, state_board : state_board}),
+        })
+        .then((response) => response.json())
+        .then((data) => {       
+          turn = data['turn']
                 state_board = data['state_board']
                 player_1.position = data['position_p1']
                 player_2.position = data['position_p2']
@@ -86,6 +92,9 @@ function move(x, y){
                         refreshGrid()         
                 }
         })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
         
 }
 
