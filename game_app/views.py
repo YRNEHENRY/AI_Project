@@ -24,8 +24,14 @@ def index():
     insert(AIs())
     print(Humans.query.all())
     print(AIs.query.all())
-    """
     
+
+    print(QTableState.query.all()[2].up_score)
+    print(QTableState.query.all()[2].down_score)
+    print(QTableState.query.all()[2].right_score)
+    print(QTableState.query.all()[2].left_score)
+    """
+    print(Boards.query.count())
     return render_template('index.html', size = size)
 
 @app.route('/game/')
@@ -34,19 +40,18 @@ def game():
 
 @app.route('/game/start/')
 def start():
-    human_aurelien = map_Human(Humans.query.get(1))
+    player = map_Human(Humans.query.get(1))
     
     ai = map_AI(AIs.query.get(1))
     ai2 = map_AI(AIs.query.get(2))
+    ai.eps = 0.2
+    ai2.eps = 0.2
 
-
-
-    
     new_board = Boards(size = size, fk_player_1 = Humans.query.get(1).id, fk_player_2 = AIs.query.get(1).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
 
     insert(new_board)
     
-    board = map_board(new_board, human_aurelien, ai)
+    board = map_board(new_board, player, ai)
 
     ai.set_board(board)
     ai2.set_board(board)
@@ -93,20 +98,25 @@ def train():
 def train_ai():
     ai = map_AI(AIs.query.get(1))
     ai2 = map_AI(AIs.query.get(2))
-    for i in range(1, 500):
-        print(i)
+    ai.eps = 0.10
+    ai2.eps = 0.10
+    print("Training starts")
+    
+    for i in range(1, 20000):
+        #print(i)
         new_board = Boards(size = size, fk_player_1 = AIs.query.get(1).id, fk_player_2 = AIs.query.get(2).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
 
         insert(new_board)
     
         board = map_board(new_board, ai2, ai)
-        ai.eps = 0.10
-        ai2.eps = 0.10
         ai.set_board(board)
         ai2.set_board(board)
         boards[board.id] = board
         is_done = board.play()
 
+    print("Training ends")
+    historys.query.delete()
+    print("Historys deleted")
     return {"id_done" : True}
 
 

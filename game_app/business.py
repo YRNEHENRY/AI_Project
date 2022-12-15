@@ -1,5 +1,5 @@
 from game_app.ai import AI
-from game_app.models import historys, insertt, db
+from game_app.models import historys, insert, db
 
 
 class User():
@@ -303,7 +303,7 @@ class Board():
         """
         pos_1 = str(pos1[0]) + str(pos1[1])
         pos_2 = str(pos2[0]) + str(pos2[1])
-        insertt(historys(id = self.id, nb_turn = self.nb_turn, action = action, state = state, position_1 = pos_1, position_2 = pos_2))
+        insert(historys(id = self.id, nb_turn = self.nb_turn, action = action, state = state, position_1 = pos_1, position_2 = pos_2))
 
 
 
