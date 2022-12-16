@@ -26,7 +26,6 @@ def index():
     print(AIs.query.all())
     """
     #qtable_overview(10)
-    
     return render_template('index.html', size = size)
 
 @app.route('/game/')
@@ -38,19 +37,18 @@ def game():
 
 @app.route('/game/start/')
 def start():
-    human_aurelien = map_Human(Humans.query.get(1))
+    player = map_Human(Humans.query.get(1))
     
     ai = map_AI(AIs.query.get(1))
     ai2 = map_AI(AIs.query.get(2))
+    ai.eps = 0.2
+    ai2.eps = 0.2
 
-
-
-    
     new_board = Boards(size = size, fk_player_1 = Humans.query.get(1).id, fk_player_2 = AIs.query.get(1).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
 
     insert(new_board)
     
-    board = map_board(new_board, human_aurelien, ai)
+    board = map_board(new_board, player, ai)
 
     ai.set_board(board)
     ai2.set_board(board)
