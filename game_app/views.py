@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, jsonify
 
 from game_app.models import Boards, Humans, QTableState, historys, insert, init_db, AIs, db
 from game_app.ai import AI
-from game_app.business import Human, Board, map_AI, map_Human, map_board
+from game_app.business import Human, Board, map_AI, map_Human, map_board, qtable_overview
 
 
 app = Flask(__name__)
@@ -19,17 +19,21 @@ boards = {}
 def index():
     """
     init_db()
-    insert(Humans(password = "AurelienEstUnIdiot", email = "darksasuke69@yahoo.fr", name = "Giri", first_name = "Oni"))
+    insert(Humans(password = "ratio", email = "deuxiemeRatio@yahoo.fr", name = "Giri", first_name = "Oni"))
     insert(AIs())
     insert(AIs())
     print(Humans.query.all())
     print(AIs.query.all())
     """
+    #qtable_overview(10)
     
     return render_template('index.html', size = size)
 
 @app.route('/game/')
 def game():
+    historys.query.delete()
+    Boards.query.delete()
+    db.session.commit()
     return render_template('game.html', size = size)
 
 @app.route('/game/start/')
@@ -93,19 +97,25 @@ def train():
 def train_ai():
     ai = map_AI(AIs.query.get(1))
     ai2 = map_AI(AIs.query.get(2))
-    for i in range(1, 500):
-        print(i)
-        new_board = Boards(size = size, fk_player_1 = AIs.query.get(1).id, fk_player_2 = AIs.query.get(2).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
+    ai.eps = 0.10
+    ai2.eps = 0.10
 
-        insert(new_board)
-    
-        board = map_board(new_board, ai2, ai)
-        ai.eps = 0.10
-        ai2.eps = 0.10
+
+    Boards.query.delete()
+    historys.query.delete()
+    for i in range(1, 50000):
+        print(i)
+        #new_board = Boards(size = size, fk_player_1 = AIs.query.get(1).id, fk_player_2 = AIs.query.get(2).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
+
+        #insert(new_board)
+        
+        #board = map_board(new_board, ai2, ai)
+        board = Board(i, size, ai2, ai)
         ai.set_board(board)
         ai2.set_board(board)
-        boards[board.id] = board
+        #boards[board.id] = board
         is_done = board.play()
+    historys.query.delete()
 
     return {"id_done" : True}
 

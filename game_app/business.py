@@ -1,5 +1,5 @@
 from game_app.ai import AI
-from game_app.models import historys, insertt, db
+from game_app.models import QTableState, historys, insert, db
 
 
 class User():
@@ -303,9 +303,35 @@ class Board():
         """
         pos_1 = str(pos1[0]) + str(pos1[1])
         pos_2 = str(pos2[0]) + str(pos2[1])
-        insertt(historys(id = self.id, nb_turn = self.nb_turn, action = action, state = state, position_1 = pos_1, position_2 = pos_2))
+        insert(historys(id = self.id, nb_turn = self.nb_turn, action = action, state = state, position_1 = pos_1, position_2 = pos_2))
 
 
+
+def qtable_overview(nb):
+    for i in range(0, nb):
+        y = 0
+        c = 0
+        qtable = QTableState.query.all()[i]
+        if qtable.state[20] == '2':
+            
+            print("Position joueur 1 : ", qtable.state[16:18])
+            print("Position joueur 2 : ", qtable.state[18:20])
+            print("Tour du joueur ", qtable.state[20])
+            while y < 4:
+                line = []
+                y += 1
+                j = 0
+                while j < 4:
+                    line.append(qtable.state[c])
+                    c += 1
+                    j += 1
+                print(line)
+
+            print("Haut", qtable.up_score)
+            print("Bas", qtable.down_score)
+            print("Droite", qtable.right_score)
+            print("Gauche", qtable.left_score)
+            print("-----------------\n")
 
 
 def map_AI(ai):

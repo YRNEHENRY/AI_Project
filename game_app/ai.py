@@ -9,7 +9,7 @@ class AI ():
     def __init__(self, id, login):
         self.login = login
         self.id = id
-        self.eps = 0.1
+        self.eps = 1
         self.Q_table = {}
         self.history_actions = ""
         self.history_states = ""
@@ -85,26 +85,32 @@ class AI ():
 
             pos = self.board.positions[self.board.turn - 1]
 
-
+            #print("Haut", qtable.up_score)
+            #print("Bas", qtable.down_score)
+            #print("Droite", qtable.right_score)
+            #print("Gauche", qtable.left_score)
 
             if move == 0:
+                #print("haut")
                 pos[0] = pos[0] - 1
                 self.board.positions[self.board.turn - 1] = pos
                 action = pos
 
             elif move == 1:
-
+                #print("gauche")
                 pos[1] = pos[1] - 1
                 self.board.positions[self.board.turn - 1] = pos
                 action = pos
 
             elif move == 2:
+                #print("bas")
                 pos[0] = pos[0] + 1
 
                 self.board.positions[self.board.turn - 1] = pos
                 action = pos
 
             elif move == 3:
+                #print("droite")
                 pos[1] = pos[1] + 1
                 self.board.positions[self.board.turn - 1] = pos
                 action = pos
@@ -149,34 +155,47 @@ class AI ():
 
         state_id = state.state + state.position_1 + state.position_2 + turnp1
 
-
+        action = int(state.action)
+        #print(action)
 
         reward = self.board.get_reward(state.state, statep1, turn)
 
         qtable = QTableState.query.get(state_id)
         if qtable == None:
-            insert(QTableState(state = state_id))
-            qtable = QTableState.query.get(state_id)
+            qtable = QTableState(state = state_id)
+            insert(qtable)
 
         qtablep1 = QTableState.query.get(statep1_id)
         if qtablep1 == None:
-            insert(QTableState(state = statep1_id))
-            qtablep1 = QTableState.query.get(statep1_id)
+            qtablep1 = QTableState(state = statep1_id)
+            insert(qtablep1)
 
 
         score_p1 = max([qtablep1.down_score, qtablep1.up_score, qtablep1.left_score, qtablep1.right_score])
 
         #UP
         if action == 0:
+            #print("update UP")
+            #print(qtable.up_score)
             qtable.up_score = qtable.up_score + 0.1 * (reward + 0.75 * score_p1 - qtable.up_score)
+            #print(qtable.up_score)
         #LEFT
         elif action == 1:
+            #print("update LEFT")
+            #print(qtable.left_score)
             qtable.left_score = qtable.left_score + 0.1 * (reward + 0.75 * score_p1 - qtable.left_score)
+            #print(qtable.left_score)
         #DOWN
         elif action == 2:
+            #print("update DOWN")
+            #print(qtable.down_score)
             qtable.down_score = qtable.down_score + 0.1 * (reward + 0.75 * score_p1 - qtable.down_score)
+            #print(qtable.down_score)
         #RIGHT
         elif action == 3:
+            #print("update RIGHT")
+            #print(qtable.right_score)
             qtable.right_score = qtable.right_score + 0.1 * (reward + 0.75 * score_p1 - qtable.right_score)
+            #print(qtable.right_score)
 
         db.session.commit()
