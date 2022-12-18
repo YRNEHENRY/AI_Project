@@ -56,26 +56,20 @@ class AI ():
         
 
         if qtable == None or (qtable.up_score == 0 and qtable.left_score == 0 and qtable.down_score == 0 and qtable.right_score == 0):
-            #print("explo")
             return self.exploration_step(position)
         else:
-            #print("greed")
             moves = []
             scores = []
             if 0 in list(actions.values()):
-                #print(qtable.up_score)
                 scores.append(qtable.up_score)
                 moves.append(0)
             if 1 in list(actions.values()):
-                #print(qtable.left_score)
                 scores.append(qtable.left_score)
                 moves.append(1)
             if 2 in list(actions.values()):
-                #print(qtable.down_score)
                 scores.append(qtable.down_score)
                 moves.append(2)
             if 3 in list(actions.values()):
-                #print(qtable.right_score)
                 scores.append(qtable.right_score)
                 moves.append(3)
             
@@ -85,32 +79,24 @@ class AI ():
 
             pos = self.board.positions[self.board.turn - 1]
 
-            #print("Haut", qtable.up_score)
-            #print("Bas", qtable.down_score)
-            #print("Droite", qtable.right_score)
-            #print("Gauche", qtable.left_score)
 
             if move == 0:
-                #print("haut")
                 pos[0] = pos[0] - 1
                 self.board.positions[self.board.turn - 1] = pos
                 action = pos
 
             elif move == 1:
-                #print("gauche")
                 pos[1] = pos[1] - 1
                 self.board.positions[self.board.turn - 1] = pos
                 action = pos
 
             elif move == 2:
-                #print("bas")
                 pos[0] = pos[0] + 1
 
                 self.board.positions[self.board.turn - 1] = pos
                 action = pos
 
             elif move == 3:
-                #print("droite")
                 pos[1] = pos[1] + 1
                 self.board.positions[self.board.turn - 1] = pos
                 action = pos
@@ -156,7 +142,6 @@ class AI ():
         state_id = state.state + state.position_1 + state.position_2 + turnp1
 
         action = int(state.action)
-        #print(action)
 
         reward = self.board.get_reward(state.state, statep1, turn)
 
@@ -175,27 +160,15 @@ class AI ():
 
         #UP
         if action == 0:
-            #print("update UP")
-            #print(qtable.up_score)
             qtable.up_score = qtable.up_score + 0.1 * (reward + 0.75 * score_p1 - qtable.up_score)
-            #print(qtable.up_score)
         #LEFT
         elif action == 1:
-            #print("update LEFT")
-            #print(qtable.left_score)
             qtable.left_score = qtable.left_score + 0.1 * (reward + 0.75 * score_p1 - qtable.left_score)
-            #print(qtable.left_score)
         #DOWN
         elif action == 2:
-            #print("update DOWN")
-            #print(qtable.down_score)
             qtable.down_score = qtable.down_score + 0.1 * (reward + 0.75 * score_p1 - qtable.down_score)
-            #print(qtable.down_score)
         #RIGHT
         elif action == 3:
-            #print("update RIGHT")
-            #print(qtable.right_score)
             qtable.right_score = qtable.right_score + 0.1 * (reward + 0.75 * score_p1 - qtable.right_score)
-            #print(qtable.right_score)
 
         db.session.commit()
