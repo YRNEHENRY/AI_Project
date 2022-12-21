@@ -17,7 +17,7 @@ boards = {}
 
 @app.route('/')
 def index():
-    #print(len(QTableState.query.all()))
+    """ Render the homepage template on the / route """
     """
     init_db()
     insert(Humans(password = "ratio", email = "deuxiemeRatio@yahoo.fr", name = "Giri", first_name = "Oni"))
@@ -26,11 +26,12 @@ def index():
     print(Humans.query.all())
     print(AIs.query.all())
     """
-
+    #qtable_overview(10)
     return render_template('index.html', size = size)
 
 @app.route('/game/')
 def game():
+    """ Render the game template on the /game route"""
     historys.query.delete()
     Boards.query.delete()
     db.session.commit()
@@ -38,16 +39,23 @@ def game():
 
 @app.route('/game/start/')
 def start():
+    """ Start a new game """
     player = map_Human(Humans.query.get(1))
     
     ai = map_AI(AIs.query.get(1))
     ai2 = map_AI(AIs.query.get(2))
+    ai.eps = 1
+    ai2.eps = 1
 
-    new_board = Boards(size = size, fk_player_1 = Humans.query.get(1).id, fk_player_2 = AIs.query.get(1).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
+    # player 1
+    # new_board = Boards(size = size, fk_player_1 = Humans.query.get(1).id, fk_player_2 = AIs.query.get(1).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
+    # insert(new_board)
+    # board = map_board(new_board, player, ai)
 
+    # ai 1
+    new_board = Boards(size = size, fk_player_1 = AIs.query.get(1).id, fk_player_2 = Humans.query.get(1).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
     insert(new_board)
-    
-    board = map_board(new_board, player, ai2)
+    board = map_board(new_board, ai, player)
 
     ai.set_board(board)
     ai2.set_board(board)
@@ -60,6 +68,7 @@ def start():
 
 @app.route('/game/move/', methods=['POST'])
 def move():
+    """ Move a player in the game"""
     data = request.get_json()
     move = data['move']
     id = data['idBoard']
@@ -88,33 +97,37 @@ def move():
 
 @app.route('/train/')
 def train():
+    """ Render the train template on the /train route"""
     return render_template('train.html')
 
 @app.route('/train/ai/')
 def train_ai():
+    """ Train the AI """
     ai = map_AI(AIs.query.get(1))
     ai2 = map_AI(AIs.query.get(2))
-    ai.eps = 0.50
-    ai2.eps = 0.50
 
-
+    historys.query.delete()
     Boards.query.delete()
-    historys.query.delete()
-    print("Eps AI1 : ", ai.eps)
-    print("Eps AI2 : ", ai2.eps)
-    for i in range(1, 50000):
-        print(i)
-        #new_board = Boards(size = size, fk_player_1 = AIs.query.get(1).id, fk_player_2 = AIs.query.get(2).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
+    ai.eps = 0.5
+    ai2.eps = 0.5
 
-        #insert(new_board)
-        
-        #board = map_board(new_board, ai2, ai)
-        board = Board(i, size, ai2, ai)
-        ai.set_board(board)
-        ai2.set_board(board)
-        #boards[board.id] = board
-        is_done = board.play()
+    print(f"Training AI {ai.eps} started")
+    for ind in range(1, 251):
+        print(ind)
+        for i in range(1, 1000):
+            #new_board = Boards(size = size, fk_player_1 = AIs.query.get(1).id, fk_player_2 = AIs.query.get(2).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
+            #insert(new_board)
+            
+            #board = map_board(new_board, ai2, ai)
+            board = Board((ind*1000)+i, size, ai2, ai)
+            ai.set_board(board)
+            ai2.set_board(board)
+            #boards[board.id] = board
+            is_done = board.play()
+    print(f"Training  AI {ai.eps} done")
+
     historys.query.delete()
+    Boards.query.delete()
 
     return {"id_done" : True}
 
@@ -124,10 +137,12 @@ def train_ai():
 
 @app.route('/rules/')
 def rules():
+    """ Render the rules template on the /rules route"""
     return render_template('rules.html')
 
 @app.route('/infos/')
 def infos():
+    """ Render the infos template on the /infos route who contains the informations about a player"""
     return render_template('infos.html')
 
 

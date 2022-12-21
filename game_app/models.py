@@ -21,6 +21,7 @@ class Users(db.Model):
     username = db.Column(db.VARCHAR(25), nullable = False, unique = True)
     nb_wins = db.Column(db.Integer, nullable = False)
     nb_defeats = db.Column(db.Integer, nullable = False)
+    nb_draws = db.Column(db.Integer, nullable = False)
 
 class Humans (db.Model):
     __tablename__ = "humans"
