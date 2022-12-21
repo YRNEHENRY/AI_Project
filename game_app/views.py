@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, jsonify
 
 from game_app.models import Boards, Humans, QTableState, historys, insert, init_db, AIs, db
 from game_app.ai import AI
-from game_app.business import Human, Board, map_AI, map_Human, map_board, qtable_overview
+from game_app.business import Human, Board, map_AI, map_Human, map_board
 
 
 app = Flask(__name__)

@@ -160,15 +160,27 @@ class AI ():
 
         #UP
         if action == 0:
+            #print("update UP")
+            #print(qtable.up_score)
             qtable.up_score = qtable.up_score + 0.1 * (reward + 0.75 * score_p1 - qtable.up_score)
+            #print(qtable.up_score)
         #LEFT
         elif action == 1:
+            #print("update LEFT")
+            #print(qtable.left_score)
             qtable.left_score = qtable.left_score + 0.1 * (reward + 0.75 * score_p1 - qtable.left_score)
+            #print(qtable.left_score)
         #DOWN
         elif action == 2:
+            #print("update DOWN")
+            #print(qtable.down_score)
             qtable.down_score = qtable.down_score + 0.1 * (reward + 0.75 * score_p1 - qtable.down_score)
+            #print(qtable.down_score)
         #RIGHT
         elif action == 3:
+            #print("update RIGHT")
+            #print(qtable.right_score)
             qtable.right_score = qtable.right_score + 0.1 * (reward + 0.75 * score_p1 - qtable.right_score)
+            #print(qtable.right_score)
 
         db.session.commit()
