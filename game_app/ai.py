@@ -24,7 +24,6 @@ class AI ():
         """
             Exploration method to play (random choice)
         """
-        print("explo")
         old_state = self.board.state_board
         possible_move, actions = self.board.get_possible_move(position)
         i_random = random.randint(0, len(possible_move) - 1)
@@ -153,7 +152,6 @@ class AI ():
             qtable.right_score = qtable.right_score + 0.1 * (reward + 0.75 * score_p1 - qtable.right_score)
 
         if self.board.is_done()[0]:
-            print(statep1_id)
             if actionp1 == 0:
                 qtablep1.up_score = 10
             elif actionp1 == 1:
