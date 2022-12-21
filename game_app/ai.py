@@ -10,7 +10,6 @@ class AI ():
         self.login = login
         self.id = id
         self.eps = 1
-        self.Q_table = {}
         self.history_actions = ""
         self.history_states = ""
         self.history_positions = ""
@@ -25,21 +24,18 @@ class AI ():
         """
             Exploration method to play (random choice)
         """
-        old_position = position
+        print("explo")
         old_state = self.board.state_board
         possible_move, actions = self.board.get_possible_move(position)
         i_random = random.randint(0, len(possible_move) - 1)
-        self.board.positions[self.board.turn - 1] = possible_move[i_random]
-        self.board.check_enclosure()
-        self.board.update_state()
-        return actions[str(possible_move[i_random])], old_state, old_position
+
+        return actions[str(possible_move[i_random])], old_state, possible_move[i_random]
 
 
     def greedy_step(self, state, position):
         """
             Greedy step method to play (choose the best possible choice based on QTable)
         """
-        old_position = position
         old_state = self.board.state_board
         moves, actions = self.board.get_possible_move(position)
     
@@ -82,31 +78,24 @@ class AI ():
 
             if move == 0:
                 pos[0] = pos[0] - 1
-                self.board.positions[self.board.turn - 1] = pos
                 action = pos
 
             elif move == 1:
                 pos[1] = pos[1] - 1
-                self.board.positions[self.board.turn - 1] = pos
                 action = pos
 
             elif move == 2:
                 pos[0] = pos[0] + 1
-
-                self.board.positions[self.board.turn - 1] = pos
                 action = pos
 
             elif move == 3:
                 pos[1] = pos[1] + 1
-                self.board.positions[self.board.turn - 1] = pos
                 action = pos
 
-            self.board.check_enclosure()
-            self.board.update_state()
-            return actions[str(action)], old_state, old_position
+            return actions[str(action)], old_state, action
 
     
-    def get_move(self, position, state):
+    def get_move(self, position):
         """
             Get a move base on epsilon (exploration or greedy) then update the QTable and the state of the board
         """
@@ -117,15 +106,11 @@ class AI ():
         old_state = ""
         turn = self.board.turn
         if random.uniform(0, 1) > self.eps:
-            action, old_state, old_position = self.exploration_step(position)
+            action, old_state, pos = self.exploration_step(position)
         else:
-            action, old_state, old_position = self.greedy_step(actual_state, position)
+            action, old_state, pos = self.greedy_step(actual_state, position)
 
-        if self.board.nb_turn > 2:
-
-            old_state = historys.query.get((self.board.id, self.board.nb_turn - 2))
-            self.update_Qtable(old_state, action, pos1, turn, pos2, actual_state)
-        self.board.save_history(str(action), actual_state, pos1, pos2)
+        return pos, old_state, action, pos1, turn, pos2, actual_state
 
         
 
@@ -133,7 +118,7 @@ class AI ():
         """
             Update the state values from a QTable
         """
-
+        actionp1 = action
         
         statep1_id = statep1 + str(pos1[0]) + str(pos1[1]) + str(pos2[0]) + str(pos2[1]) + str(turn)
 
@@ -143,7 +128,7 @@ class AI ():
 
         action = int(state.action)
 
-        reward = self.board.get_reward(state.state, statep1, turn)
+        reward = self.board.rewards(state.state, statep1, turn)
 
         qtable = QTableState.query.get(state_id)
         if qtable == None:
@@ -158,29 +143,23 @@ class AI ():
 
         score_p1 = max([qtablep1.down_score, qtablep1.up_score, qtablep1.left_score, qtablep1.right_score])
 
-        #UP
         if action == 0:
-            #print("update UP")
-            #print(qtable.up_score)
             qtable.up_score = qtable.up_score + 0.1 * (reward + 0.75 * score_p1 - qtable.up_score)
-            #print(qtable.up_score)
-        #LEFT
         elif action == 1:
-            #print("update LEFT")
-            #print(qtable.left_score)
             qtable.left_score = qtable.left_score + 0.1 * (reward + 0.75 * score_p1 - qtable.left_score)
-            #print(qtable.left_score)
-        #DOWN
         elif action == 2:
-            #print("update DOWN")
-            #print(qtable.down_score)
             qtable.down_score = qtable.down_score + 0.1 * (reward + 0.75 * score_p1 - qtable.down_score)
-            #print(qtable.down_score)
-        #RIGHT
         elif action == 3:
-            #print("update RIGHT")
-            #print(qtable.right_score)
             qtable.right_score = qtable.right_score + 0.1 * (reward + 0.75 * score_p1 - qtable.right_score)
-            #print(qtable.right_score)
 
+        if self.board.is_done()[0]:
+            print(statep1_id)
+            if actionp1 == 0:
+                qtablep1.up_score = 10
+            elif actionp1 == 1:
+                qtablep1.left_score = 10
+            elif actionp1 == 2:
+                qtablep1.down_score = 10
+            elif actionp1 == 3:
+                qtablep1.right_score = 10
         db.session.commit()

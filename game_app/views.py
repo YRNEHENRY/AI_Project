@@ -23,10 +23,7 @@ def index():
     insert(Humans(password = "ratio", email = "deuxiemeRatio@yahoo.fr", name = "Giri", first_name = "Oni"))
     insert(AIs())
     insert(AIs())
-    print(Humans.query.all())
-    print(AIs.query.all())
     """
-    #qtable_overview(10)
     return render_template('index.html', size = size)
 
 @app.route('/game/')
@@ -55,7 +52,7 @@ def start():
     # ai 1
     new_board = Boards(size = size, fk_player_1 = AIs.query.get(1).id, fk_player_2 = Humans.query.get(1).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
     insert(new_board)
-    board = map_board(new_board, ai, player)
+    board = map_board(new_board, player, ai)
 
     ai.set_board(board)
     ai2.set_board(board)

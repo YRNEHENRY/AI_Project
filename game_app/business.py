@@ -42,7 +42,18 @@ class Board():
         is_done = self.is_done()[0]
 
         while isinstance(self.players[self.turn - 1], AI) and not is_done:
-            self.players[self.turn - 1].get_move(self.positions[self.turn - 1], self.state_board)
+            pos, old_state, action, pos1, turn, pos2, actual_state = self.players[self.turn - 1].get_move(self.positions[self.turn - 1])
+            self.positions[self.turn - 1] = pos
+            t = self.turn - 1
+            self.check_enclosure()
+            self.update_state()
+            if self.nb_turn > 2:
+                old_state = historys.query.get((self.id, self.nb_turn - 2))
+                self.players[t].update_Qtable(old_state, action, pos1, turn, pos2, actual_state)
+        
+            self.save_history(str(action), actual_state, pos1, pos2)
+
+
             is_done = self.is_done()[0]
             self.nb_turn += 1
         return self.is_done()
@@ -59,19 +70,14 @@ class Board():
         """
             Move the current player and return (if the game is done, winner)
         """
-        action = ""
         if movement == "UP":
             self.positions[self.turn - 1][0] -= 1
-            action = "0"
         elif movement == "DOWN":
             self.positions[self.turn - 1][0] += 1
-            action = "2"
         elif movement == "LEFT":
             self.positions[self.turn - 1][1] -= 1
-            action = "1"
         elif movement == "RIGHT":
             self.positions[self.turn - 1][1] += 1
-            action = "3"
 
         self.update_state()
         
@@ -287,7 +293,7 @@ class Board():
         return is_done, winner
 
     
-    def get_reward(self, state, statep1, current_player):
+    def rewards(self, state, statep1, current_player):
         """
             Return the reward of the current player
         """
