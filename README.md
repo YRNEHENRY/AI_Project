@@ -4,26 +4,35 @@
 Territory is a high school project aiming at running an AI trained with Q-function on a game running online with Flask.
 
 ## Installations
-To keep this project running, you will need 3 elements : python, flask and sqlalchemy.
+To keep this project running, you will need 2 elements : SQLite and the `requirements.txt`.
 
-### Python
-The projet is running with python. So first of all, you will need to download it at this link : https://www.python.org/downloads/
+### SQLite
+The project is running with a database. So, first of all, you will download SQLite at this link : https://www.sqlite.org/index.html
+
+### Requirements.txt
+By running our file, the required extensions will install themselves.
+
+If the requirements file does not work, follow these steps to install them manually...
+
+### Requirements.txt doesn't work
+#### Python
+The projet is running with python. So, you will need to download it at this link : https://www.python.org/downloads/
 <br>Now that python is ready, we will need one last element for our future installations: `pip install`.
 <br>Open you're terminal and write this line :
 
     python get-pip.py    
 This command will allow us to install the pip command. This command is used to install, from the console, various python frameworks.
 
-### Flask
+#### Flask
 The first framework we will use is Flask. Flask is an open-source framework in web and python. This one will allow us to run a web server using python.
 <br>To install Flask, you will, always in the terminal, launch this pip command line:
 
     pip install Flask
-### SqlAlchemy
+#### SqlAlchemy
 Then, to run our database, we will need SQLAlchemy. As before you will just need to use this command:
 
     pip install -U Flask-SQLAlchemy
-### The github repository
+#### The github repository
 Finally, all you need to do is clone or download our project and running our `run.py` file !
 
 
