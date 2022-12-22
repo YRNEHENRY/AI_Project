@@ -104,7 +104,7 @@ class AI ():
         action = {}
         old_state = ""
         turn = self.board.turn
-        if random.uniform(0, 1) > self.eps:
+        if random.uniform(0, 1) < self.eps:
             action, old_state, pos = self.exploration_step(position)
         else:
             action, old_state, pos = self.greedy_step(actual_state, position)

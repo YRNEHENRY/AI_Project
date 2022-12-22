@@ -39,7 +39,7 @@ def game():
 def start():
     """ Start a new game """
     ai = map_AI(AIs.query.get(1))
-    ai.eps = 1
+    ai.eps = 0
 
     player1 = Humans.query.get(1).id
     player2 = AIs.query.get(1).id
@@ -104,8 +104,8 @@ def train_ai():
 
     historys.query.delete()
     Boards.query.delete()
-    ai.eps = 0.1
-    ai2.eps = 0.1
+    ai.eps = 0.9
+    ai2.eps = 0.9
 
     print(f"Training AI {ai.eps} started")
     for ind in range(1, 51):
@@ -125,9 +125,9 @@ def train_ai():
     historys.query.delete()
     Boards.query.delete()
 
-    ai.eps = 0.2
+    ai.eps = 0.8
     ai.learning_rate = 0.7
-    ai2.eps = 0.2
+    ai2.eps = 0.8
     ai2.learning_rate = 0.7
 
     print(f"Training AI {ai.eps} started")
@@ -148,9 +148,9 @@ def train_ai():
     historys.query.delete()
     Boards.query.delete()
 
-    ai.eps = 0.3
+    ai.eps = 0.7
     ai.learning_rate = 0.5
-    ai2.eps = 0.3
+    ai2.eps = 0.7
     ai2.learning_rate = 0.5
 
     print(f"Training AI {ai.eps} started")
