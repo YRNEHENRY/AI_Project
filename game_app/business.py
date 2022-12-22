@@ -1,7 +1,6 @@
 from game_app.ai import AI
 from game_app.models import QTableState, historys, insert, db
 
-
 class User():
 
     def __init__(self,login):
@@ -133,9 +132,6 @@ class Board():
             for s in line:
                 str_sate += str(s)
         return str_sate
-        
-
-    
 
 
     def update_state(self):
@@ -189,14 +185,8 @@ class Board():
                 enclosures = enclosures + enclosure
 
         
-        self.update_enclosure(enclosures)
-        
-        
-
-
-
-
-        
+        self.update_enclosure(enclosures)        
+      
     def check_neighbour(self, enclosure, position):
         """
             Check all neighbours from a position (position of neighbour from an other case), return 0 if the enclosure if
@@ -310,8 +300,6 @@ class Board():
         pos_1 = str(pos1[0]) + str(pos1[1])
         pos_2 = str(pos2[0]) + str(pos2[1])
         insert(historys(id = self.id, nb_turn = self.nb_turn, action = action, state = state, position_1 = pos_1, position_2 = pos_2))
-
-
 
 
 def map_AI(ai):

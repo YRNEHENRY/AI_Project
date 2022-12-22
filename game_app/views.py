@@ -1,5 +1,6 @@
 from urllib import request
 from flask import Flask, render_template, request, jsonify
+import random
 
 
 from game_app.models import Boards, Humans, QTableState, historys, insert, init_db, AIs, db
@@ -18,7 +19,7 @@ boards = {}
 @app.route('/')
 def index():
     """ Render the homepage template on the / route """
-    """"
+    """
     init_db()
     insert(Humans(password = "ratio", email = "deuxiemeRatio@yahoo.fr", name = "Giri", first_name = "Oni"))
     insert(AIs())
@@ -37,25 +38,23 @@ def game():
 @app.route('/game/start/')
 def start():
     """ Start a new game """
-    player = map_Human(Humans.query.get(1))
-    
     ai = map_AI(AIs.query.get(1))
-    ai2 = map_AI(AIs.query.get(2))
     ai.eps = 1
-    ai2.eps = 1
 
-    # player 1
-    # new_board = Boards(size = size, fk_player_1 = Humans.query.get(1).id, fk_player_2 = AIs.query.get(1).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
-    # insert(new_board)
-    # board = map_board(new_board, player, ai)
+    player1 = Humans.query.get(1).id
+    player2 = AIs.query.get(1).id
 
-    # ai 1
-    new_board = Boards(size = size, fk_player_1 = AIs.query.get(1).id, fk_player_2 = Humans.query.get(1).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
+    mapped_player1 = map_Human(Humans.query.get(1))
+    mapped_player2 = ai
+    
+    swap = lambda a, b, mapped_a, mapped_b: (b, a, mapped_b, mapped_a) if random.random() < 0.5 else (a, b, mapped_a, mapped_b)
+    player1, player2, mapped_player1, mapped_player2 = swap(player1, player2, mapped_player1, mapped_player2)
+
+    new_board = Boards(size = size, fk_player_1 = player1, fk_player_2 = player2, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
     insert(new_board)
-    board = map_board(new_board, player, ai)
+    board = map_board(new_board, mapped_player1, mapped_player2)
 
     ai.set_board(board)
-    ai2.set_board(board)
     boards[board.id] = board
     is_done = board.play()
 
@@ -105,11 +104,57 @@ def train_ai():
 
     historys.query.delete()
     Boards.query.delete()
-    ai.eps = 0.5
-    ai2.eps = 0.5
+    ai.eps = 0.1
+    ai2.eps = 0.1
 
     print(f"Training AI {ai.eps} started")
-    for ind in range(1, 251):
+    for ind in range(1, 51):
+        print(ind)
+        for i in range(1, 1000):
+            #new_board = Boards(size = size, fk_player_1 = AIs.query.get(1).id, fk_player_2 = AIs.query.get(2).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
+            #insert(new_board)
+            
+            #board = map_board(new_board, ai2, ai)
+            board = Board((ind*1000)+i, size, ai2, ai)
+            ai.set_board(board)
+            ai2.set_board(board)
+            #boards[board.id] = board
+            is_done = board.play()
+    print(f"Training  AI {ai.eps} done")
+
+    historys.query.delete()
+    Boards.query.delete()
+
+    ai.eps = 0.2
+    ai.learning_rate = 0.7
+    ai2.eps = 0.2
+    ai2.learning_rate = 0.7
+
+    print(f"Training AI {ai.eps} started")
+    for ind in range(1, 26):
+        print(ind)
+        for i in range(1, 1000):
+            #new_board = Boards(size = size, fk_player_1 = AIs.query.get(1).id, fk_player_2 = AIs.query.get(2).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
+            #insert(new_board)
+            
+            #board = map_board(new_board, ai2, ai)
+            board = Board((ind*1000)+i, size, ai2, ai)
+            ai.set_board(board)
+            ai2.set_board(board)
+            #boards[board.id] = board
+            is_done = board.play()
+    print(f"Training  AI {ai.eps} done")
+
+    historys.query.delete()
+    Boards.query.delete()
+
+    ai.eps = 0.3
+    ai.learning_rate = 0.5
+    ai2.eps = 0.3
+    ai2.learning_rate = 0.5
+
+    print(f"Training AI {ai.eps} started")
+    for ind in range(1, 26):
         print(ind)
         for i in range(1, 1000):
             #new_board = Boards(size = size, fk_player_1 = AIs.query.get(1).id, fk_player_2 = AIs.query.get(2).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
