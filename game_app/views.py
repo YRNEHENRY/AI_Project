@@ -18,7 +18,7 @@ boards = {}
 @app.route('/')
 def index():
     """ Render the homepage template on the / route """
-    """
+    """"
     init_db()
     insert(Humans(password = "ratio", email = "deuxiemeRatio@yahoo.fr", name = "Giri", first_name = "Oni"))
     insert(AIs())
