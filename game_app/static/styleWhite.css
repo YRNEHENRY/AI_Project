@@ -160,16 +160,27 @@ th{
     margin-right: auto;
 }
 
-.score_board {
-    margin-left: auto;
-    margin-right: auto;
-    
-    /* display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content: space-around; */
-}
 
+.score_board {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .up {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .down {
+    display: flex;
+    align-items: center;
+  }
+  
+  .container_winner {
+    height: 100%;
+    margin: auto;
+  }
+  
 /* search */
 
 .form_settings {
