@@ -27,9 +27,12 @@
             <tr class="rowX{{i+1}}">
             {%for y in range(0, size)%}
                 <th class="itemY{{y+1}} neutral"><div></div></th>
-                    
             {% endfor %}
         {% endfor %}
+        <p hidden="true" id="size">{{size}}</p>
+        <script>let sz = document.getElementById('size').innerHTML
+                document.getElementById('size').remove()
+        </script>
     </div>
 </div>
 <div class="mainDiv">
@@ -203,17 +206,17 @@
     </div>
 <div id="buttonDiv" class="button">
         
-    <button class="btn" onclick="startGame('/game/start?players=human/human')">Player versus Player</a></button>
+    <button class="btn" onclick="startGame('/game/start?players=human/human/' + sz)">Player versus Player</a></button>
 </div>
 
 <div id="buttonDiv" class="button">
         
-    <button class="btn" onclick="startGame('/game/start?players=human/ai')">Player verus AI</a></button>
+    <button class="btn" onclick="startGame('/game/start?players=human/ai/' + sz)">Player verus AI</a></button>
 </div>
 
 <div id="buttonDiv" class="button">
         
-    <button class="btn" onclick="startGame('/game/start?players=ai/ai')">AI versus AI</a></button>
+    <button class="btn" onclick="startGame('/game/start?players=ai/ai/' + sz)">AI versus AI</a></button>
 </div>
 </div>
 <script>

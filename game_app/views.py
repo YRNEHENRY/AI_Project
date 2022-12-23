@@ -32,6 +32,7 @@ def index():
 @app.route('/game/')
 def game():
     """ Render the game template on the /game route"""
+    size = int(request.args.get("size"))
     historys.query.delete()
     Boards.query.delete()
     db.session.commit()
@@ -40,10 +41,11 @@ def game():
 @app.route('/game/start')
 def start():
     """ Start a new game """
-    players = request.args.get("players")
-
-    p1 = players.split('/')[0]
-    p2 = players.split('/')[1]
+    parameters = request.args.get("players")
+    
+    p1 = parameters.split('/')[0]
+    p2 = parameters.split('/')[1]
+    size = int(parameters.split('/')[2])
 
     if p1 == 'human':
         player1 = Humans.query.get(1).id
