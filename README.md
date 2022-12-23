@@ -49,6 +49,18 @@ In the `game_app` folder, We have 3 possibilities :
 - The 2nd is the `template` folder which will contain each of our different views of the site
 - The 3rd and last one is the different python files in the folder. Each corresponding to a part of the code.
 
+### The AI
+Our AI works with the qfunction. Our two AIs will train against each other to fill their Qtable.
+<br>As the number of games increases, the epsilon greedy will decrease as well as our learning rate.
+
+## Rules of the game
+The goal of the game is to get as many squares as possible.
+<br>For that each one will play one after the other.
+
+Be careful, you can't move on a square belonging to your opponent.
+
+If you manage to form a block completely surrounded by your squares. This will create an "enclosure" and take all the squares in the enclosure.
+
 ## Teacher's comments
 ### Review 10/10/22 : Squelette :
 - [x] Manque d'une page d'accueille (avec un bouton pour aller vers le jeu)
