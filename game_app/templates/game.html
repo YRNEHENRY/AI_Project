@@ -7,10 +7,10 @@
         <div class="score_board">
             <div class="up">
                 <div class="player1_name">
-                    <h3 id="player1">Player 1</h3>
+                    <h3 id="player1"></h3>
                 </div>
                 <div class="player2_name">
-                    <h3 id="player2">Player 2</h3>
+                    <h3 id="player2"></h3>
                 </div>
             </div>
             <div class="down"">       
@@ -32,7 +32,7 @@
         {% endfor %}
     </div>
 </div>
-
+<div class="mainDiv">
 <div id="buttonDiv" class="button">
         
     <button class="btn" onclick="startGame('/game/start?players=human/human')">Joueur contre Joueur</a></button>
@@ -47,7 +47,7 @@
         
     <button class="btn" onclick="startGame('/game/start?players=ai/ai')">IA contre IA</a></button>
 </div>
-
+</div>
 <script>
     document.getElementsByClassName("grid")[0].hidden = true
     document.getElementsByClassName("score_board")[0].hidden = true
