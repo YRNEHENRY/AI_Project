@@ -31,12 +31,13 @@ function startGame(){
                 isDone = data['is_done']
                 winner = data['winner']
                 size = data['size']
+                document.getElementById("player1").innerHTML = data[''];
+                document.getElementById("player2").innerHTML = data[''];
                 
                 if(!isDone)
-                        turnGame()
+                        turnGame();
                 else{
-                        refreshGrid()
-                             
+                        refreshGrid();
                 }    
         }
 )}
@@ -90,6 +91,7 @@ async function move(x, y){
                 if(!isDone)
                         turnGame()
                 else{
+                        document.getElementById("winner").innerHTML = "Winner : " + winner;
                         refreshGrid()         
                 }
         })
