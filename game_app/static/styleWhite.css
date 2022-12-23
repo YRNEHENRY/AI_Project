@@ -143,13 +143,30 @@ th{
     height: 80px;
 }
 
-.player1{
+.playerDefault1{
     background-color: #c3b1e2;
 }
 
-.player2{
+.playerDefault2{
     background-color: #fdf698;
 }
+
+.greenPlayer{
+    background-color: #76bb60;
+}
+.redPlayer{
+    background-color:#ff6961;
+}
+.purplePlayer{
+    background-color:#c3b1e2;
+}
+.yellowPlayer{
+    background-color:#fdf698;
+}
+.bluePlayer{
+    background-color:#a7ecf2;
+}
+
 
 .container{
     display: flex;
