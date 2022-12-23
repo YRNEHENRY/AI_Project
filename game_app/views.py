@@ -75,7 +75,7 @@ def start():
 
     namep1 = mapped_player1.first_name if not isinstance(mapped_player1, AI) else mapped_player1.login
     namep2 = mapped_player2.first_name if not isinstance(mapped_player2, AI) else mapped_player2.login
-    print(namep2)
+
 
     if isinstance(mapped_player1, AI) and isinstance(mapped_player2, AI):
         mapped_player1.eps = 0.2
