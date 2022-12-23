@@ -10,14 +10,15 @@ from game_app.business import Human, Board, map_AI, map_Human, map_board
 
 app = Flask(__name__)
 app.config.from_object('config')
-size = 4
 
 
 boards = {}
 
+size = 4
 
 @app.route('/')
 def index():
+
     """ Render the homepage template on the / route """
     """
     init_db()
@@ -209,7 +210,16 @@ def infos_user():
     return render_template('infos.html')
 
 
-@app.route('/settings/')
+@app.route('/settings/', methods=['POST', "GET"])
 def settings():
     """ Render the settings template on the /settings route with """
-    return render_template('settings.html')
+    if request.method == "GET":
+        return render_template('settings.html')
+    else:   
+        print(request.form.get('board_size'))
+        print(request.form.get('token1'))
+        print(request.form.get('color1'))
+        return render_template('settings.html')
+
+
+

@@ -1,6 +1,5 @@
 from game_app.ai import AI
 from game_app.models import QTableState, historys, insert, db
-
 class User():
 
     def __init__(self,login):
