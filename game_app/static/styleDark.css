@@ -12,9 +12,19 @@ body{
     padding-left: 20px;
 }
 
+.mainDiv{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
+.buttonDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-nav, footer{
+nav{
     color:white;
     background-color: #2d333b;
 }
@@ -28,32 +38,8 @@ nav{
 
 footer{
     position:absolute;
-    bottom:0;
-    width:100%;
-    padding-top:15px;
-    padding-bottom: 25px;
-    height:20px;
-    font-size: x-small;
-    display: flex;
-}
-
-footer > div{
-    flex-grow: 1;
-    
-}
-
-#div1Footer{
-    padding-left: 10px;
-}
-
-footer a{
-    color:white;
-    text-decoration: none;
-}
-
-#div3Footer > p, #div4Footer > p{
-    margin-top: 0px;
-    margin-bottom: 1px;
+    bottom: 0;
+    right: 0;
 }
 
 #navButtons{
@@ -105,29 +91,29 @@ body{
 /* btn */
 a:link{
     text-decoration: none;
-    color: white;
+    color: #4d586f;
 }
 
 a:visited{
     text-decoration: none;
-    color: white;
+    color: #4d586f;
 }
 .btn {
-    background-color: #00e536;
-    color: white;
+    background-color: white;
+    color: #4d586f;
     border: none;
-    cursor: pointer;
+    cursor: pointer; 
 
     margin-top: 3.375rem;
     padding: 15px 20px;
     border-radius: .5rem;
-    box-shadow: 0px 10px 0px 0px #088e27;
+    box-shadow: 0px 10px 0px 0px #f7f7fe;
 }
 
 .btn:active {
     transform: translateY(5px);
-    box-shadow: 0px 7px 0px 0px #008751;
-    background: #088e27;
+    box-shadow: 0px 7px 0px 0px #e0e0ea;
+    background: linear-gradient(270deg, rgb(221, 221, 231) 0.09%, rgb(246, 246, 252) 28.19%, rgb(249, 249, 255) 71.9%, rgb(215, 215, 224) 100%);
 }
 
 /* table */

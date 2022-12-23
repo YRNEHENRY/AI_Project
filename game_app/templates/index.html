@@ -2,24 +2,6 @@
 
 {% block content %}
 
-<div class="mainDiv">
-
-    <table class="grid">
-    {%for i in range(0, size)%}
-        <tr class="rowX{{i+1}}"></div>
-        {%for y in range(0, size)%}
-            <th class="itemY{{y+1}} neutral">
-                <div class="show_move">
-                </div>
-            </th>
-        {% endfor %}
-        
-    {% endfor %}
-    </div>
-
-</div>
-
-
 <div id="rulesDiv">
     <div>
         <h1>Rules</h1>
@@ -27,14 +9,16 @@
     </div>
 </div>
 
-<div id="buttonDiv">
+<div class="mainDiv">
+    <div id="buttonDiv">
     
-    <button class="btn"><a href="/game/">Jouer</a></button>
-</div>
-
-<div id="buttonDiv">
+        <button class="btn"><a href="/game/">Jouer</a></button>
+    </div>
     
-    <button class="btn"><a href="/train/">Train</a></button>
+    <div id="buttonDiv">
+        
+        <button class="btn"><a href="/train/">Train</a></button>
+    </div>
 </div>
 
 {% endblock %}

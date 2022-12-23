@@ -3,9 +3,21 @@
 }
 
 
-nav, footer{
+nav{
     color:white;
     background-color: #2d333b;
+}
+
+.mainDiv{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.buttonDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 nav{
@@ -17,33 +29,10 @@ nav{
 
 footer{
     position:absolute;
-    bottom:0;
-    width:100%;
-    padding-top:15px;
-    padding-bottom: 25px;
-    height:20px;
-    font-size: x-small;
-    display: flex;
+    bottom: 0;
+    right: 0;
 }
 
-footer > div{
-    flex-grow: 1;
-    
-}
-
-#div1Footer{
-    padding-left: 10px;
-}
-
-footer a{
-    color:white;
-    text-decoration: none;
-}
-
-#div3Footer > p, #div4Footer > p{
-    margin-top: 0px;
-    margin-bottom: 1px;
-}
 
 #navButtons{
     flex-grow: 1;
@@ -95,7 +84,12 @@ body{
 }
 
 .github_svg {
+    fill: black;
     padding-right: 2em;
+}
+
+.github_svg:hover {
+    fill: gray;
 }
 
 /* btn */
@@ -109,7 +103,7 @@ a:visited{
     color: white;
 }
 .btn {
-    background-color: #00e536;
+    background-color: #4d586f;
     color: white;
     border: none;
     cursor: pointer;
@@ -117,13 +111,13 @@ a:visited{
     margin-top: 3.375rem;
     padding: 15px 20px;
     border-radius: .5rem;
-    box-shadow: 0px 10px 0px 0px #088e27;
+    box-shadow: 0px 10px 0px 0px #262d3d;
 }
 
 .btn:active {
     transform: translateY(5px);
-    box-shadow: 0px 7px 0px 0px #008751;
-    background: #088e27;
+    box-shadow: 0px 7px 0px 0px #15171f;
+    background: linear-gradient(90deg, rgb(24, 29, 39) 0%, rgb(37, 44, 60) 14.06%, rgb(37, 45, 61) 83.85%, rgb(20, 24, 32) 100%);
 }
 
 /* table */
@@ -155,4 +149,13 @@ th{
 
 .player2{
     background-color: red;
+}
+
+.container{
+    display: flex;
+}
+
+.game-board {
+    margin-left: auto;
+    margin-right: auto;
 }

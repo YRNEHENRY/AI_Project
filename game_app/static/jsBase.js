@@ -99,9 +99,6 @@ async function move(x, y){
 }
 
 function updateState(movement){
-
-
-
         x = players[turn - 1].position[0]
         y = players[turn - 1].position[1]
         state_board[x][y] = turn
@@ -134,12 +131,8 @@ function displayPossibleMove(){
         for(let i in possibleMove){
                 
                 table.children[possibleMove[i][0]].children[possibleMove[i][1]].children[0].className += "show_move"
-                table.children[possibleMove[i][0]].children[possibleMove[i][1]].addEventListener("click", move.bind(null, possibleMove[i][0], possibleMove[i][1]))
-                
-        }
-        
-        
-   
+                table.children[possibleMove[i][0]].children[possibleMove[i][1]].addEventListener("click", move.bind(null, possibleMove[i][0], possibleMove[i][1]))     
+        }  
 }
 
 
