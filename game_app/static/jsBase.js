@@ -2,6 +2,8 @@ let game_over_sound = new Audio('/static/sounds/game_over.mp3');
 let game_start_sound = new Audio('/static/sounds/start.mp3');
 let move_sound = new Audio('/static/sounds/move.mp3');
 
+move_sound.playbackRate=2;
+
 let isWhiteMode = true;
 
 function changeStyleMode(){
@@ -98,6 +100,7 @@ function turnGame(){
 
 async function move(x, y){
         let move = [x,y]
+        move_sound.play();
 
         if (move[0] < players[turn - 1].position[0]){
                 movement = "UP"
