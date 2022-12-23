@@ -128,11 +128,11 @@ a:visited{
   }
 
   .player1{
-    background-color: greenyellow;
+    background-color: #c3b1e2;
 }
 
 .player2{
-    background-color: red;
+    background-color: #fdf698;
 }
 
 table{
@@ -145,4 +145,18 @@ th{
     min-width: 80px;
     border: solid 2px;
     height: 80px;
+}
+
+table,th,td
+    {
+      border:2px solid lightgrey;
+    }
+
+.container{
+    display: flex;
+}
+
+.game-board {
+    margin-left: auto;
+    margin-right: auto;
 }

@@ -168,3 +168,9 @@ function train(){
                 alert("Fin du training")
         })
 }
+
+// green #76bb60
+// red #ff6961
+// purple #c3b1e2
+// yellow #fdf698
+// blue #a7ecf2
