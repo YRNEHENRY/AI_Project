@@ -1,3 +1,7 @@
+let game_over_sound = new Audio('/static/sounds/game_over.mp3');
+let game_start_sound = new Audio('/static/sounds/start.mp3');
+let move_sound = new Audio('/static/sounds/move.mp3');
+
 let isWhiteMode = true;
 
 function changeStyleMode(){
@@ -47,6 +51,7 @@ function setSettings(){
 function startGame(url){
         document.getElementsByClassName("grid")[0].hidden = false
         document.getElementsByClassName("score_board")[0].hidden = false
+        game_start_sound.play();
 
         const form = document.getElementById('token-settings');
         formData = new FormData(form);
@@ -134,6 +139,7 @@ async function move(x, y){
                 if(!isDone)
                         turnGame()
                 else{
+                        game_over_sound.play();
                         document.getElementById("winner").innerHTML = "Winner : " + winner;
                         refreshGrid()       
                 }
