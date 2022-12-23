@@ -187,4 +187,13 @@ def infos():
     """ Render the infos template on the /infos route who contains the informations about a player"""
     return render_template('infos.html')
 
+@app.route('/infos/user/')
+def infos_user():
+    """ Render the infos template on the /infos/user route who contains the informations about a player"""
+    return render_template('infos.html')
 
+
+@app.route('/settings/')
+def settings():
+    """ Render the settings template on the /settings route with """
+    return render_template('settings.html')
