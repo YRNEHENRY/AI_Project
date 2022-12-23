@@ -36,8 +36,8 @@ function startGame(url){
                 isDone = data['is_done']
                 winner = data['winner']
                 size = data['size']
-                document.getElementById("player1").innerHTML = data['player_1'];
-                document.getElementById("player2").innerHTML = data['player_2'];
+                document.getElementById("player1").innerHTML = data['namep1'];
+                document.getElementById("player2").innerHTML = data['namep2'];
                 
                 if(!isDone)
                         turnGame();

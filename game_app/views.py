@@ -73,13 +73,17 @@ def start():
     if isinstance(mapped_player2, AI):
         mapped_player2.set_board(board)
 
+    namep1 = mapped_player1.first_name if not isinstance(mapped_player1, AI) else mapped_player1.login
+    namep2 = mapped_player2.first_name if not isinstance(mapped_player2, AI) else mapped_player2.login
+    print(namep2)
+
     if isinstance(mapped_player1, AI) and isinstance(mapped_player2, AI):
         mapped_player1.eps = 0.2
         mapped_player2.eps = 0.2
     boards[board.id] = board
     is_done = board.play()
 
-    return {"id_board" : board.id, "state_board" : board.get_tab_state(), "turn" : board.turn, "position_p1" : board.positions[0], "position_p2" : board.positions[1], "player1_is_AI" : isinstance(board.player_1, AI), "player2_is_AI" : isinstance(board.player_2, AI), "is_done" : is_done[0], "winner" : is_done[1], 'size' : board.size}
+    return {"id_board" : board.id, "state_board" : board.get_tab_state(), "turn" : board.turn, "position_p1" : board.positions[0], "position_p2" : board.positions[1], "player1_is_AI" : isinstance(board.player_1, AI), "player2_is_AI" : isinstance(board.player_2, AI), "is_done" : is_done[0], "winner" : is_done[1], 'size' : board.size, "namep1" : namep1, "namep2" : namep2}
 
 
 

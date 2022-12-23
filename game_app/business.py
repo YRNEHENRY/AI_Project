@@ -277,9 +277,9 @@ class Board():
         nb_1 = self.state_board.count('1')
         nb_2 = self.state_board.count('2')
         if nb_1 > nb_2:
-            winner = self.player_1.first_name if not isinstance(self.player_1, AI) else "AI n°1"
+            winner = self.player_1.first_name if not isinstance(self.player_1, AI) else self.player_1.login
         elif nb_1 < nb_2:
-            winner = self.player_2.first_name if not isinstance(self.player_2, AI) else "AI n°2"
+            winner = self.player_2.first_name if not isinstance(self.player_2, AI) else self.player_2.login
         return is_done, winner
 
     
@@ -306,7 +306,7 @@ def map_AI(ai):
     """
         Change model AIs to business AI
     """
-    login = 'AI n°', ai.id
+    login = 'AI n°' +  str(ai.id)
     return AI(ai.id, login)
 
 def map_Human(human):
