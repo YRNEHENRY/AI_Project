@@ -160,3 +160,75 @@ table,th,td
     margin-left: auto;
     margin-right: auto;
 }
+
+/* search */
+
+.form_settings {
+    background-color: #e8e9f1/*#b4b7ca*/;
+    width: 300px;
+    height: 44px;
+    border-radius: 5px;
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 1cm;
+  }
+
+.input_settings {
+    all: unset;
+    font: 16px system-ui;
+    color: #262d3d;
+    height: 100%;
+    width: 100%;
+    padding: 6px 10px;
+  }
+
+  ::placeholder {
+    color: #262d3d;
+    opacity: 0.7; 
+  }
+
+.search_svg {
+    color: #262d3d;
+    fill: currentColor;
+    width: 24px;
+    height: 24px;
+    padding: 10px;
+  }
+
+.button_settings {
+    all: unset;
+    cursor: pointer;
+    width: 44px;
+    height: 44px;
+  }
+
+
+/* settings */
+.token_svg {
+    fill: #2d333b;
+    width: 50px;
+    height: 50px;
+}
+
+.radio-button  {
+    display: flex;
+}
+
+.column {
+    margin-top: 2em;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.game-settings {
+    align-items: center;
+    text-align: center;
+    background-color: #e8e9f1;
+    border: solid #2d333b 2px;
+    border-radius: .5rem;
+    padding-bottom: 2em;
+}
