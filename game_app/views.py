@@ -198,15 +198,6 @@ def train_ai():
 
     return {"id_done" : True}
 
-
-
-
-
-@app.route('/rules/')
-def rules():
-    """ Render the rules template on the /rules route"""
-    return render_template('rules.html')
-
 @app.route('/infos/')
 def infos():
     """ Render the infos template on the /infos route who contains the informations about a player"""
