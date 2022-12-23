@@ -161,6 +161,17 @@ table,th,td
     margin-right: auto;
 }
 
+.score_board {
+    margin-left: auto;
+    margin-right: auto;
+    color: white;
+    
+    /* display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content: space-around; */
+}
+
 /* search */
 
 .form_settings {
