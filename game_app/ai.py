@@ -48,7 +48,7 @@ class AI ():
 
         action = [0,0]
         qtable = QTableState.query.get(state_id)
-
+        
         
         if qtable == None or (qtable.up_score == 0 and qtable.left_score == 0 and qtable.down_score == 0 and qtable.right_score == 0):
             return self.exploration_step(position)

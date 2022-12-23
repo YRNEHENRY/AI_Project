@@ -30,6 +30,24 @@
     </div>
 </div>
 
-<script>startGame()</script>
+<div id="buttonDiv" class="button">
+        
+    <button class="btn" onclick="startGame('/game/start?players=human/human')">Joueur contre Joueur</a></button>
+</div>
+
+<div id="buttonDiv" class="button">
+        
+    <button class="btn" onclick="startGame('/game/start?players=human/ai')">Joueur contre IA</a></button>
+</div>
+
+<div id="buttonDiv" class="button">
+        
+    <button class="btn" onclick="startGame('/game/start?players=ai/ai')">IA contre IA</a></button>
+</div>
+
+<script>
+    document.getElementsByClassName("grid")[0].hidden = true
+    document.getElementsByClassName("score_board")[0].hidden = true
+</script>
 
 {% endblock %}

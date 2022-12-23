@@ -22,6 +22,7 @@ def index():
     """
     init_db()
     insert(Humans(password = "ratio", email = "deuxiemeRatio@yahoo.fr", name = "Giri", first_name = "Oni"))
+    insert(Humans(password = "Nouveauratio", email = "troisiemeRatio@yahoo.fr", name = "Giri", first_name = "Oni"))
     insert(AIs())
     insert(AIs())
     """
@@ -35,18 +36,31 @@ def game():
     db.session.commit()
     return render_template('game.html', size = size)
 
-@app.route('/game/start/')
+@app.route('/game/start')
 def start():
     """ Start a new game """
-    ai = map_AI(AIs.query.get(1))
-    ai.eps = 0
+    players = request.args.get("players")
 
-    player1 = Humans.query.get(1).id
-    player2 = AIs.query.get(1).id
+    p1 = players.split('/')[0]
+    p2 = players.split('/')[1]
 
-    mapped_player1 = map_Human(Humans.query.get(1))
-    mapped_player2 = ai
+    if p1 == 'human':
+        player1 = Humans.query.get(1).id
+        mapped_player1 = map_Human(Humans.query.get(1))
+    else:
+        player1 = AIs.query.get(2).id
+        mapped_player1 = map_AI(AIs.query.get(2))
+        mapped_player1.eps = 0
+
+    if p2 == 'human':
+        player2 = Humans.query.get(2).id
+        mapped_player2 = map_Human(Humans.query.get(2))
+    else:
+        player2 = AIs.query.get(1).id
+        mapped_player2 = map_AI(AIs.query.get(1))
+        mapped_player2.eps = 0
     
+
     swap = lambda a, b, mapped_a, mapped_b: (b, a, mapped_b, mapped_a) if random.random() < 0.5 else (a, b, mapped_a, mapped_b)
     player1, player2, mapped_player1, mapped_player2 = swap(player1, player2, mapped_player1, mapped_player2)
 
@@ -54,7 +68,14 @@ def start():
     insert(new_board)
     board = map_board(new_board, mapped_player1, mapped_player2)
 
-    ai.set_board(board)
+    if isinstance(mapped_player1, AI):
+        mapped_player1.set_board(board)
+    if isinstance(mapped_player2, AI):
+        mapped_player2.set_board(board)
+
+    if isinstance(mapped_player1, AI) and isinstance(mapped_player2, AI):
+        mapped_player1.eps = 0.2
+        mapped_player2.eps = 0.2
     boards[board.id] = board
     is_done = board.play()
 

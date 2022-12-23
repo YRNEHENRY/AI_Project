@@ -19,8 +19,13 @@ let movement
 let idBoard
 let size
 
-function startGame(){
-        fetch('/game/start/').then(response => response.json()).then(async function(data){
+function startGame(url){
+        document.getElementsByClassName("grid")[0].hidden = false
+        document.getElementsByClassName("score_board")[0].hidden = false
+        for (let button of document.getElementsByClassName("button")){
+                button.hidden = true
+        }
+        fetch(url).then(response => response.json()).then(async function(data){
                 turn = data['turn']
                 idBoard = data['id_board']
                 state_board = data['state_board']
