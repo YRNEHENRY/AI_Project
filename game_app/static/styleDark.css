@@ -2,6 +2,10 @@ body{
     background-color: #1c2129;
     font-family: 'Saira', sans-serif;
 }
+p, h1, h3{
+    font-family: sans-serif;
+    color: white;
+}
 
 #rulesDiv{
     margin: 20px;
@@ -127,14 +131,29 @@ a:visited{
     margin-right: auto;
   }
 
-  .player1{
+  .playerDefault1{
     background-color: #c3b1e2;
 }
 
-.player2{
+.playerDefault2{
     background-color: #fdf698;
 }
 
+.greenPlayer{
+    background-color: #76bb60;
+}
+.redPlayer{
+    background-color:#ff6961;
+}
+.purplePlayer{
+    background-color:#c3b1e2;
+}
+.yellowPlayer{
+    background-color:#fdf698;
+}
+.bluePlayer{
+    background-color:#a7ecf2;
+}
 table{
     border-spacing:0;
     border-collapse: collapse;

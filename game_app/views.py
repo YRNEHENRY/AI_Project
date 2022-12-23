@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, jsonify
 import random
 
 
-from game_app.models import Boards, Humans, QTableState, historys, insert, init_db, AIs, db
+from game_app.models import Boards, Humans, QTableState4, QTableState5, QTableState6, historys, insert, init_db, AIs, db
 from game_app.ai import AI
 from game_app.business import Human, Board, map_AI, map_Human, map_board
 
@@ -33,8 +33,7 @@ def index():
 def game():
     """ Render the game template on the /game route"""
     size = int(request.args.get("size"))
-    historys.query.delete()
-    Boards.query.delete()
+
     db.session.commit()
     return render_template('game.html', size = size)
 
@@ -127,6 +126,8 @@ def train():
 @app.route('/train/ai/')
 def train_ai():
     """ Train the AI """
+    size = int(request.args.get("size"))
+    print(size)
     ai = map_AI(AIs.query.get(1))
     ai2 = map_AI(AIs.query.get(2))
 
@@ -139,14 +140,14 @@ def train_ai():
     for ind in range(1, 51):
         print(ind)
         for i in range(1, 1000):
-            #new_board = Boards(size = size, fk_player_1 = AIs.query.get(1).id, fk_player_2 = AIs.query.get(2).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
-            #insert(new_board)
+            new_board = Boards(size = size, fk_player_1 = AIs.query.get(1).id, fk_player_2 = AIs.query.get(2).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
+            insert(new_board)
             
-            #board = map_board(new_board, ai2, ai)
-            board = Board((ind*1000)+i, size, ai2, ai)
+            board = map_board(new_board, ai2, ai)
+
             ai.set_board(board)
             ai2.set_board(board)
-            #boards[board.id] = board
+            boards[board.id] = board
             is_done = board.play()
     print(f"Training  AI {ai.eps} done")
 
@@ -162,14 +163,14 @@ def train_ai():
     for ind in range(1, 26):
         print(ind)
         for i in range(1, 1000):
-            #new_board = Boards(size = size, fk_player_1 = AIs.query.get(1).id, fk_player_2 = AIs.query.get(2).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
-            #insert(new_board)
+            new_board = Boards(size = size, fk_player_1 = AIs.query.get(1).id, fk_player_2 = AIs.query.get(2).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
+            insert(new_board)
             
-            #board = map_board(new_board, ai2, ai)
-            board = Board((ind*1000)+i, size, ai2, ai)
+            board = map_board(new_board, ai2, ai)
+
             ai.set_board(board)
             ai2.set_board(board)
-            #boards[board.id] = board
+            boards[board.id] = board
             is_done = board.play()
     print(f"Training  AI {ai.eps} done")
 
@@ -185,14 +186,14 @@ def train_ai():
     for ind in range(1, 26):
         print(ind)
         for i in range(1, 1000):
-            #new_board = Boards(size = size, fk_player_1 = AIs.query.get(1).id, fk_player_2 = AIs.query.get(2).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
-            #insert(new_board)
+            new_board = Boards(size = size, fk_player_1 = AIs.query.get(1).id, fk_player_2 = AIs.query.get(2).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
+            insert(new_board)
             
-            #board = map_board(new_board, ai2, ai)
-            board = Board((ind*1000)+i, size, ai2, ai)
+            board = map_board(new_board, ai2, ai)
+
             ai.set_board(board)
             ai2.set_board(board)
-            #boards[board.id] = board
+            boards[board.id] = board
             is_done = board.play()
     print(f"Training  AI {ai.eps} done")
 
@@ -210,18 +211,6 @@ def infos():
 def infos_user():
     """ Render the infos template on the /infos/user route who contains the informations about a player"""
     return render_template('infos.html')
-
-
-@app.route('/settings/', methods=['POST', "GET"])
-def settings():
-    """ Render the settings template on the /settings route with """
-    if request.method == "GET":
-        return render_template('settings.html')
-    else:   
-        print(request.form.get('board_size'))
-        print(request.form.get('token1'))
-        print(request.form.get('color1'))
-        return render_template('settings.html')
 
 
 

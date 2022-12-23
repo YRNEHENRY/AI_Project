@@ -1,6 +1,6 @@
 import random
 
-from game_app.models import QTableState, historys, insert, db
+from game_app.models import QTableState4, QTableState5, QTableState6, historys, insert, db
 
 
 
@@ -47,8 +47,13 @@ class AI ():
         state_id = state + str(pos1[0]) + str(pos1[1]) + str(pos2[0]) + str(pos2[1]) + str(self.board.turn)
 
         action = [0,0]
-        qtable = QTableState.query.get(state_id)
-        
+        if self.board.size == 4:
+            qtable = QTableState4.query.get(state_id)
+        elif self.board.size == 5:
+            qtable = QTableState5.query.get(state_id)
+        elif self.board.size == 6:
+            qtable = QTableState6.query.get(state_id)
+
         
         if qtable == None or (qtable.up_score == 0 and qtable.left_score == 0 and qtable.down_score == 0 and qtable.right_score == 0):
             return self.exploration_step(position)
@@ -129,15 +134,41 @@ class AI ():
 
         reward = self.board.rewards(state.state, statep1[0:16], turn)
 
-        qtable = QTableState.query.get(state_id)
-        if qtable == None:
-            qtable = QTableState(state = state_id)
-            insert(qtable)
 
-        qtablep1 = QTableState.query.get(statep1_id)
-        if qtablep1 == None:
-            qtablep1 = QTableState(state = statep1_id)
-            insert(qtablep1)
+
+        if self.board.size == 4:
+            qtable = QTableState4.query.get(state_id)
+            if qtable == None:
+                qtable = QTableState4(state = state_id)
+                insert(qtable)
+
+            qtablep1 = QTableState4.query.get(statep1_id)
+            if qtablep1 == None:
+                qtablep1 = QTableState4(state = statep1_id)
+                insert(qtablep1)
+
+
+        elif self.board.size == 5:
+            qtable = QTableState5.query.get(state_id)
+            if qtable == None:
+                qtable = QTableState5(state = state_id)
+                insert(qtable)
+
+            qtablep1 = QTableState5.query.get(statep1_id)
+            if qtablep1 == None:
+                qtablep1 = QTableState5(state = statep1_id)
+                insert(qtablep1)
+
+        elif self.board.size == 6:
+            qtable = QTableState6.query.get(state_id)
+            if qtable == None:
+                qtable = QTableState6(state = state_id)
+                insert(qtable)
+
+            qtablep1 = QTableState6.query.get(statep1_id)
+            if qtablep1 == None:
+                qtablep1 = QTableState6(state = statep1_id)
+                insert(qtablep1)
 
         score_p1 = max([qtablep1.down_score, qtablep1.up_score, qtablep1.left_score, qtablep1.right_score])
         if action == 0:

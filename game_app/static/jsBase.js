@@ -209,8 +209,8 @@ function refreshGrid(){
 
 }
 
-function train(){
-        fetch('/train/ai/').then(response => response.json()).then(async function(data){
+function train(size){
+        fetch('/train/ai/?size=' + size).then(response => response.json()).then(async function(data){
                 alert("Fin du training")
         })
 }
