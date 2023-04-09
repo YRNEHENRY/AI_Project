@@ -1,6 +1,7 @@
 from urllib import request
 from flask import Flask, render_template, request, jsonify
 import random
+import pandas as pd
 
 
 from game_app.models import Boards, Humans, QTableState4, QTableState5, QTableState6, historys, insert, init_db, AIs, db
@@ -13,8 +14,9 @@ app.config.from_object('config')
 
 
 boards = {}
-
 size = 4
+
+df = pd.DataFrame(columns=["winner", "p1_squares", "p2_squares", "turns"])
 
 @app.route('/')
 def index():
@@ -23,7 +25,7 @@ def index():
     """
     init_db()
     insert(Humans(password = "ratio", email = "deuxiemeRatio@yahoo.fr", name = "Giri", first_name = "Oni"))
-    insert(Humans(password = "Nouveauratio", email = "troisiemeRatio@yahoo.fr", name = "Giri", first_name = "Oni"))
+    insert(Humans(password = "Nouveauratio", email = "troisiemeRatio@yahoo.fr", name = "Cool", first_name = "Samuraï"))
     insert(AIs())
     insert(AIs())
     """
@@ -127,50 +129,43 @@ def train():
 def train_ai():
     """ Train the AI """
     size = int(request.args.get("size"))
-    print(size)
+
     ai = map_AI(AIs.query.get(1))
     ai2 = map_AI(AIs.query.get(2))
 
     historys.query.delete()
     Boards.query.delete()
     ai.eps = 0.9
+    ai.learning_rate = 0.9
     ai2.eps = 0.9
+    ai2.learning_rate = 0.9
 
     print(f"Training AI {ai.eps} started")
-    for ind in range(1, 51):
+    for ind in range(1, 151):
         print(ind)
         for i in range(1, 1000):
-            new_board = Boards(size = size, fk_player_1 = AIs.query.get(1).id, fk_player_2 = AIs.query.get(2).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
-            insert(new_board)
-            
-            board = map_board(new_board, ai2, ai)
-
+            board = Board((ind*1000)+i, size, ai2, ai)
             ai.set_board(board)
             ai2.set_board(board)
-            boards[board.id] = board
             is_done = board.play()
     print(f"Training  AI {ai.eps} done")
 
     historys.query.delete()
     Boards.query.delete()
 
+    
     ai.eps = 0.8
     ai.learning_rate = 0.7
     ai2.eps = 0.8
     ai2.learning_rate = 0.7
 
     print(f"Training AI {ai.eps} started")
-    for ind in range(1, 26):
+    for ind in range(1, 56):
         print(ind)
         for i in range(1, 1000):
-            new_board = Boards(size = size, fk_player_1 = AIs.query.get(1).id, fk_player_2 = AIs.query.get(2).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
-            insert(new_board)
-            
-            board = map_board(new_board, ai2, ai)
-
+            board = Board((ind*1000)+i, size, ai2, ai)
             ai.set_board(board)
             ai2.set_board(board)
-            boards[board.id] = board
             is_done = board.play()
     print(f"Training  AI {ai.eps} done")
 
@@ -183,19 +178,15 @@ def train_ai():
     ai2.learning_rate = 0.5
 
     print(f"Training AI {ai.eps} started")
-    for ind in range(1, 26):
+    for ind in range(1, 56):
         print(ind)
         for i in range(1, 1000):
-            new_board = Boards(size = size, fk_player_1 = AIs.query.get(1).id, fk_player_2 = AIs.query.get(2).id, turn = 1, position_p1 = "00", position_p2 = "33", state_board = ("1" + "0"*((size * size) - 2) + "2"))
-            insert(new_board)
-            
-            board = map_board(new_board, ai2, ai)
-
+            board = Board((ind*1000)+i, size, ai2, ai)
             ai.set_board(board)
             ai2.set_board(board)
-            boards[board.id] = board
             is_done = board.play()
     print(f"Training  AI {ai.eps} done")
+
 
     historys.query.delete()
     Boards.query.delete()

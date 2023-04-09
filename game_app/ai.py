@@ -132,7 +132,11 @@ class AI ():
 
         action = int(state.action)
 
-        reward = self.board.rewards(state.state, statep1[0:16], turn)
+
+        dim = self.board.size * self.board.size
+
+        reward = self.board.rewards(state.state, statep1[0:dim], turn)
+        
 
 
 
@@ -172,23 +176,27 @@ class AI ():
 
         score_p1 = max([qtablep1.down_score, qtablep1.up_score, qtablep1.left_score, qtablep1.right_score])
         if action == 0:
-            qtable.up_score = qtable.up_score + self.learning_rate * (reward + 0.75 * score_p1 - qtable.up_score)
+            qtable.up_score = qtable.up_score + self.learning_rate * (reward + 0.9 * score_p1 - qtable.up_score)
         elif action == 1:
-            qtable.left_score = qtable.left_score + self.learning_rate * (reward + 0.75 * score_p1 - qtable.left_score)
+            qtable.left_score = qtable.left_score + self.learning_rate * (reward + 0.9 * score_p1 - qtable.left_score)
         elif action == 2:
-            qtable.down_score = qtable.down_score + self.learning_rate * (reward + 0.75 * score_p1 - qtable.down_score)
+            qtable.down_score = qtable.down_score + self.learning_rate * (reward + 0.9 * score_p1 - qtable.down_score)
         elif action == 3:
-            qtable.right_score = qtable.right_score + self.learning_rate * (reward + 0.75 * score_p1 - qtable.right_score)
+            qtable.right_score = qtable.right_score + self.learning_rate * (reward + 0.9 * score_p1 - qtable.right_score)
+
+        
 
         if self.board.is_done()[0]:
-            statep2 = self.board.state_board
-            reward = self.board.rewards(qtablep1.state[0:16], statep2, turn)
+            dim = self.board.size * self.board.size
+            reward = self.board.rewards(state.state, statep1[0:dim], turn)
+
             if actionp1 == 0:
-                qtablep1.up_score = qtablep1.up_score + self.learning_rate * (reward - qtablep1.up_score)
+                qtablep1.up_score = reward + 100
             elif actionp1 == 1:
-                qtablep1.left_score = qtablep1.left_score + self.learning_rate * (reward - qtablep1.left_score)
+                qtablep1.left_score = reward + 100
             elif actionp1 == 2:
-                qtablep1.down_score = qtablep1.down_score + self.learning_rate * (reward - qtablep1.down_score)
+                qtablep1.down_score = reward + 100
             elif actionp1 == 3:
-                qtablep1.right_score = qtablep1.right_score + self.learning_rate * (reward - qtablep1.right_score)
+                qtablep1.right_score = reward + 100
+            
         db.session.commit()
