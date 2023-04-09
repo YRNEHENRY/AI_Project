@@ -1,11 +1,7 @@
 import random
-
 from game_app.models import QTableState4, QTableState5, QTableState6, historys, insert, db
 
-
-
 class AI ():
-
     def __init__(self, id, login):
         self.login = login
         self.id = id
@@ -123,22 +119,12 @@ class AI ():
             Update the state values from a QTable
         """
         actionp1 = action
-        
         statep1_id = statep1 + str(pos1[0]) + str(pos1[1]) + str(pos2[0]) + str(pos2[1]) + str(turn)
-
         turnp1 = "2" if (state.nb_turn % 2 == 0) else "1"
-
         state_id = state.state + state.position_1 + state.position_2 + turnp1
-
         action = int(state.action)
-
-
         dim = self.board.size * self.board.size
-
         reward = self.board.rewards(state.state, statep1[0:dim], turn)
-        
-
-
 
         if self.board.size == 4:
             qtable = QTableState4.query.get(state_id)
@@ -184,7 +170,6 @@ class AI ():
         elif action == 3:
             qtable.right_score = qtable.right_score + self.learning_rate * (reward + 0.9 * score_p1 - qtable.right_score)
 
-        
 
         if self.board.is_done()[0]:
             dim = self.board.size * self.board.size
