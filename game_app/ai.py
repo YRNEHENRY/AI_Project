@@ -5,7 +5,7 @@ class AI ():
     def __init__(self, id, login):
         self.login = login
         self.id = id
-        self.eps = 1
+        self.eps = 0.9
         self.learning_rate = 0.1
         self.history_actions = ""
         self.history_states = ""

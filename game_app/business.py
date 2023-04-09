@@ -32,6 +32,8 @@ class Board():
         self.players = [player_1, player_2]
         self.nb_turn = 1
 
+        self.count_squares = lambda: (self.state_board.count("1"), self.state_board.count("2"))
+
     
     def play(self):
         """

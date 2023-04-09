@@ -3,20 +3,15 @@ from flask import Flask, render_template, request, jsonify
 import random
 import pandas as pd
 
-
 from game_app.models import Boards, Humans, QTableState4, QTableState5, QTableState6, historys, insert, init_db, AIs, db
 from game_app.ai import AI
 from game_app.business import Human, Board, map_AI, map_Human, map_board
 
-
 app = Flask(__name__)
 app.config.from_object('config')
 
-
 boards = {}
 size = 4
-
-df = pd.DataFrame(columns=["winner", "p1_squares", "p2_squares", "turns"])
 
 @app.route('/')
 def index():
@@ -128,6 +123,7 @@ def train():
 @app.route('/train/ai/')
 def train_ai():
     """ Train the AI """
+    df = pd.DataFrame(columns=["winner", "p1_squares", "p2_squares", "turns"])
     size = int(request.args.get("size"))
 
     ai = map_AI(AIs.query.get(1))
@@ -147,46 +143,14 @@ def train_ai():
             board = Board((ind*1000)+i, size, ai2, ai)
             ai.set_board(board)
             ai2.set_board(board)
+
             is_done = board.play()
+            p1_squares, p2_squares = board.count_squares()
+            new_row = {"winner": is_done, "p1_squares": p1_squares, "p2_squares": p2_squares, "turns": board.nb_turn}
+            df = df.append(new_row, ignore_index=True)
+            
     print(f"Training  AI {ai.eps} done")
-
-    historys.query.delete()
-    Boards.query.delete()
-
-    
-    ai.eps = 0.8
-    ai.learning_rate = 0.7
-    ai2.eps = 0.8
-    ai2.learning_rate = 0.7
-
-    print(f"Training AI {ai.eps} started")
-    for ind in range(1, 56):
-        print(ind)
-        for i in range(1, 1000):
-            board = Board((ind*1000)+i, size, ai2, ai)
-            ai.set_board(board)
-            ai2.set_board(board)
-            is_done = board.play()
-    print(f"Training  AI {ai.eps} done")
-
-    historys.query.delete()
-    Boards.query.delete()
-
-    ai.eps = 0.7
-    ai.learning_rate = 0.5
-    ai2.eps = 0.7
-    ai2.learning_rate = 0.5
-
-    print(f"Training AI {ai.eps} started")
-    for ind in range(1, 56):
-        print(ind)
-        for i in range(1, 1000):
-            board = Board((ind*1000)+i, size, ai2, ai)
-            ai.set_board(board)
-            ai2.set_board(board)
-            is_done = board.play()
-    print(f"Training  AI {ai.eps} done")
-
+    df.to_csv(f"data/ais_eps{ai.eps}_lr{ai.learning_rate}.csv".replace(".", ""), index=False)
 
     historys.query.delete()
     Boards.query.delete()
