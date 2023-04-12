@@ -146,7 +146,8 @@ def train_ai():
 
             is_done = board.play()
             p1_squares, p2_squares = board.count_squares()
-            new_row = {"winner": is_done, "p1_squares": p1_squares, "p2_squares": p2_squares, "turns": board.nb_turn}
+            winner = "p1" if p1_squares > p2_squares else "p2"
+            new_row = {"winner": winner, "p1_squares": p1_squares, "p2_squares": p2_squares, "turns": board.nb_turn}
             df = df.append(new_row, ignore_index=True)
             
     print(f"Training  AI {ai.eps} done")

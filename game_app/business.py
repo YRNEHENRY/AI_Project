@@ -7,7 +7,6 @@ class User():
 
 
 class Human(User):
-
     def __init__(self, login, id, password, email, name, first_name):
         super().__init__(login)
         self.id = id
@@ -18,7 +17,6 @@ class Human(User):
 
 
 class Board():
-
     def __init__(self, id, size, player_1, player_2):
         self.id = id
         self.size = size
