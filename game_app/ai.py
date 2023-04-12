@@ -6,6 +6,7 @@ class AI ():
         self.login = login
         self.id = id
         self.eps = 0.9
+        self.discount_rate = 0.9
         self.learning_rate = 0.1
         self.history_actions = ""
         self.history_states = ""
@@ -162,13 +163,13 @@ class AI ():
 
         score_p1 = max([qtablep1.down_score, qtablep1.up_score, qtablep1.left_score, qtablep1.right_score])
         if action == 0:
-            qtable.up_score = qtable.up_score + self.learning_rate * (reward + 0.9 * score_p1 - qtable.up_score)
+            qtable.up_score = qtable.up_score + self.learning_rate * (reward + self.discount_rate * score_p1 - qtable.up_score)
         elif action == 1:
-            qtable.left_score = qtable.left_score + self.learning_rate * (reward + 0.9 * score_p1 - qtable.left_score)
+            qtable.left_score = qtable.left_score + self.learning_rate * (reward + self.discount_rate * score_p1 - qtable.left_score)
         elif action == 2:
-            qtable.down_score = qtable.down_score + self.learning_rate * (reward + 0.9 * score_p1 - qtable.down_score)
+            qtable.down_score = qtable.down_score + self.learning_rate * (reward + self.discount_rate * score_p1 - qtable.down_score)
         elif action == 3:
-            qtable.right_score = qtable.right_score + self.learning_rate * (reward + 0.9 * score_p1 - qtable.right_score)
+            qtable.right_score = qtable.right_score + self.learning_rate * (reward + self.discount_rate * score_p1 - qtable.right_score)
 
 
         if self.board.is_done()[0]:
