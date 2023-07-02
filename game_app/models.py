@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, ForeignKey, Integer, insert
+import csv
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///example.sqlite"
@@ -64,15 +65,69 @@ class historys(db.Model):
     position_1 = db.Column(db.String(4), nullable = False)
     position_2 = db.Column(db.String(4), nullable = False)
 
-
-
 class QTableState4(db.Model):
-    #16 chiffres pour board (4x4) + 4 chiffres pour pos joueurs + 1 chiffres (1 ou 2) pour turn
-	state = db.Column(db.String(21), primary_key = True)
-	left_score = db.Column(db.Integer, default=0)
-	right_score = db.Column(db.Integer, default=0)
-	up_score = db.Column(db.Integer, default=0)
-	down_score = db.Column(db.Integer, default=0)
+    # 16 chiffres pour board (4x4) + 4 chiffres pour pos joueurs + 1 chiffre (1 ou 2) pour turn
+    state = db.Column(db.String(21), primary_key=True)
+    left_score = db.Column(db.Integer, default=0)
+    right_score = db.Column(db.Integer, default=0)
+    up_score = db.Column(db.Integer, default=0)
+    down_score = db.Column(db.Integer, default=0)
+
+    @staticmethod
+    def export_to_csv(file_path : str):
+        # Retrieve all instances of QTableState4 from the database
+        instances = QTableState4.query.all()
+        fieldnames = ['state', 'left_score', 'right_score', 'up_score', 'down_score']
+
+        # Check if there are instances to export
+        if not instances:
+            print("ERROR : no instances to export.")
+            return
+
+        # Open CSV file in write mode
+        with open(file_path, 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow(fieldnames) # Write the first line with the variable names
+
+            # Write the values of each instance in a line of the CSV file
+            for instance in instances:
+                row = [
+                    instance.state,
+                    instance.left_score,
+                    instance.right_score,
+                    instance.up_score,
+                    instance.down_score
+                ]
+                writer.writerow(row)
+        
+        print(f"Export complete. Data has been saved to {file_path}.")
+
+
+    @staticmethod
+    def import_from_csv(file_path : str):
+        # Empty the existing table to avoid duplicates
+        QTableState4.delete_all()
+
+        # Open CSV file in read mode
+        with open(file_path, 'r') as csv_file:
+            reader = csv.reader(csv_file)
+
+            # Ignore the first line containing variable names
+            next(reader)
+
+            # Insert each row as a new instance in the database
+            for row in reader:
+                instance = QTableState4(state=row[0], left_score=row[1], right_score=row[2],
+                                       up_score=row[3], down_score=row[4])
+                db.session.add(instance)
+
+        db.session.commit()
+        print(f"Import complete. Data has been imported from {file_path}.")
+    
+    @staticmethod
+    def delete_all():
+        QTableState4.query.delete()
+        db.session.commit()
 
 class QTableState5(db.Model):
     #16 chiffres pour board (5x5) + 4 chiffres pour pos joueurs + 1 chiffres (1 ou 2) pour turn

@@ -13,17 +13,96 @@ app.config.from_object('config')
 boards = {}
 size = 4
 
+path_builder = lambda folder, eps, lr: f"data/{folder}/ais_eps{eps*100}_lr{lr*100}.csv"
+"""
+Function Name: path_builder
+
+Description:
+This lambda function constructs a file path string based on the provided parameters: folder, eps, and lr.
+The resulting string follows the format: "data/{folder}/ais_eps{eps*100}_lr{lr*100}.csv".
+
+Parameters:
+- folder (str): The name of the folder.
+- eps (float): The epsilon value, multiplied by 100 to represent a percentage.
+- lr (float): The learning rate value, multiplied by 100 to represent a percentage.
+
+Returns:
+str: The file path string constructed using the provided parameters.
+"""
+
+clear_games = lambda: (
+    historys.query.delete(),
+    Boards.query.delete(),
+    db.session.commit()
+)
+
+
+def training_to_csv(ai1 : AI, ai2 : AI, size_board, nb_games : int, nb_tests : int, eps : float, lr : float):
+    """
+    """
+    df = pd.DataFrame(columns=["winner", "p1_squares", "p2_squares", "turns"])
+
+    QTableState4.delete_all()
+    clear_games()
+
+    ai1.learning_rate, ai2.learning_rate = lr, lr
+    nb_games = nb_games // 5
+
+    print(f"Training started - eps {eps} & lr {lr}")
+    for phase in range(1, 6):
+        ai1.eps, ai2.eps = eps, eps
+    
+        print(f"Phase {phase} : training...")
+        for i in range(1, nb_games + 1):
+            for j in range(1, 1000):
+                board = Board((i*1000)+j, size, ai2, ai1)
+                ai1.set_board(board)
+                ai2.set_board(board)
+                is_done = board.play()
+
+        clear_games()
+        ai1.eps, ai2.eps = 0, 0
+        print(f"Phase {phase} : results...")
+        for i in range(1, nb_tests + 1):
+            board = Board(i, size, ai2, ai1)
+            ai1.set_board(board)
+            ai2.set_board(board)
+            is_done = board.play()
+
+            p1_squares, p2_squares = board.count_squares()
+            winner = "p1" if p1_squares > p2_squares else "p2"
+            df.loc[len(df)] = [winner, p1_squares, p2_squares, board.nb_turn]
+        
+    print(f"Training done - eps {eps} & lr {lr}")
+
+    file_path = path_builder("trains", eps, lr)
+    df.to_csv(file_path, index=False)
+
+    file_path = path_builder("ai", eps, lr)
+    QTableState4.export_to_csv(file_path)
+
+    print("Export as csv completed")
+
+def training(ai1 : AI, ai2 : AI, size, nb_games : int, eps : float, lr : float):
+    clear_games()
+    ai1.eps, ai2.eps = eps, eps
+    ai1.learning_rate, ai2.learning_rate = lr, lr
+
+    print(f"Training started - eps {eps} & lr {lr}")
+    for ind in range(1, nb_games + 1):
+        print(ind)
+        for i in range(1, 1000):
+            board = Board((ind*1000)+i, size, ai2, ai1)
+            ai1.set_board(board)
+            ai2.set_board(board)
+            is_done = board.play()
+            
+    print(f"Training done - eps {eps} & lr {lr}")
+
 @app.route('/')
 def index():
 
     """ Render the homepage template on the / route """
-    """
-    init_db()
-    insert(Humans(password = "ratio", email = "deuxiemeRatio@yahoo.fr", name = "Giri", first_name = "Oni"))
-    insert(Humans(password = "Nouveauratio", email = "troisiemeRatio@yahoo.fr", name = "Cool", first_name = "Samuraï"))
-    insert(AIs())
-    insert(AIs())
-    """
     return render_template('index.html', size = size)
 
 @app.route('/game/')
@@ -123,38 +202,14 @@ def train():
 @app.route('/train/ai/')
 def train_ai():
     """ Train the AI """
-    df = pd.DataFrame(columns=["winner", "p1_squares", "p2_squares", "turns"])
     size = int(request.args.get("size"))
 
-    ai = map_AI(AIs.query.get(1))
+    ai1 = map_AI(AIs.query.get(1))
     ai2 = map_AI(AIs.query.get(2))
 
-    historys.query.delete()
-    Boards.query.delete()
-    ai.eps = 0.9
-    ai.learning_rate = 0.9
-    ai2.eps = 0.9
-    ai2.learning_rate = 0.9
+    # training(ai1, ai2, size, 3, 0.9, 0.9)
 
-    print(f"Training AI {ai.eps} started")
-    for ind in range(1, 151):
-        print(ind)
-        for i in range(1, 1000):
-            board = Board((ind*1000)+i, size, ai2, ai)
-            ai.set_board(board)
-            ai2.set_board(board)
-
-            is_done = board.play()
-            p1_squares, p2_squares = board.count_squares()
-            winner = "p1" if p1_squares > p2_squares else "p2"
-            new_row = {"winner": winner, "p1_squares": p1_squares, "p2_squares": p2_squares, "turns": board.nb_turn}
-            df = df.append(new_row, ignore_index=True)
-            
-    print(f"Training  AI {ai.eps} done")
-    df.to_csv(f"data/ais_eps{ai.eps}_lr{ai.learning_rate}.csv".replace(".", ""), index=False)
-
-    historys.query.delete()
-    Boards.query.delete()
+    training_to_csv(ai1, ai2, size, 5, 50, 0.9, 0.9)
 
     return {"id_done" : True}
 
@@ -169,4 +224,23 @@ def infos_user():
     return render_template('infos.html')
 
 
+@app.route('/properties/')
+def properties():
+    """ Render the properties template on the /properties route who contains the properties of the AI"""
+    return render_template('properties.html')
 
+@app.route('/properties/reboot/')
+def properties_reboot():
+    """ Reboot the db """
+    init_db()
+    insert(Humans(password = "ratio", email = "deuxiemeRatio@yahoo.fr", name = "Giri", first_name = "Oni"))
+    insert(Humans(password = "Nouveauratio", email = "troisiemeRatio@yahoo.fr", name = "Cool", first_name = "Samuraï"))
+    insert(AIs())
+    insert(AIs())
+    return render_template('properties.html')
+
+@app.route('/properties/delete/')
+def properties_delete():
+    """ Delete the AI """
+    QTableState4.delete_all()
+    return render_template('properties.html')

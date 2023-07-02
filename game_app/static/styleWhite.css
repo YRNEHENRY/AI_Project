@@ -290,3 +290,19 @@ th{
     border-radius: .5rem;
     padding-bottom: 2em;
 }
+
+.properties_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 150px;
+  }
+
+.import_files, .reboot_button, .delete_files {
+    width: 75px;
+    height: 75px;
+    fill: #2d333b;
+    cursor: pointer;
+
+    margin: 30px;
+}
