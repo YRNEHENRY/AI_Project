@@ -2,6 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, ForeignKey, Integer, insert
 import csv
+import time
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///example.sqlite"
@@ -100,13 +101,14 @@ class QTableState4(db.Model):
                 ]
                 writer.writerow(row)
         
-        print(f"Export complete. Data has been saved to {file_path}.")
+        print(f"Export complete.")
 
 
     @staticmethod
     def import_from_csv(file_path : str):
         # Empty the existing table to avoid duplicates
         QTableState4.delete_all()
+        start = time.time()
 
         # Open CSV file in read mode
         with open(file_path, 'r') as csv_file:
@@ -122,7 +124,9 @@ class QTableState4(db.Model):
                 db.session.add(instance)
 
         db.session.commit()
-        print(f"Import complete. Data has been imported from {file_path}.")
+        end = time.time()
+        print(f"Import complete.")
+        print(f"Time elapsed : {end - start} seconds.")
     
     @staticmethod
     def delete_all():

@@ -37,7 +37,7 @@ clear_games = lambda: (
 )
 
 
-def training_to_csv(ai1 : AI, ai2 : AI, size_board, nb_games : int, nb_tests : int, eps : float, lr : float):
+def training_to_csv(ai1 : AI, ai2 : AI, size_board, nb_games : int, sessions : int, nb_tests : int, eps : float, eps_dec : float, lr : float):
     """
     """
     df = pd.DataFrame(columns=["winner", "p1_squares", "p2_squares", "turns"])
@@ -46,23 +46,28 @@ def training_to_csv(ai1 : AI, ai2 : AI, size_board, nb_games : int, nb_tests : i
     clear_games()
 
     ai1.learning_rate, ai2.learning_rate = lr, lr
-    nb_games = nb_games // 5
+    nb_games = (nb_games / sessions) * 1000
+    eps = eps + eps_dec
 
     print(f"Training started - eps {eps} & lr {lr}")
-    for phase in range(1, 6):
+    # we train the AI for all the sessions
+    for phase in range(1, sessions + 1):
+        # we decrease epsilon each session
+        eps = eps - eps_dec if eps > 0 else 0
         ai1.eps, ai2.eps = eps, eps
     
-        print(f"Phase {phase} : training...")
+        # we train the AI for 1 session
+        print(f"Session {phase} : training...")
         for i in range(1, nb_games + 1):
-            for j in range(1, 1000):
-                board = Board((i*1000)+j, size, ai2, ai1)
-                ai1.set_board(board)
-                ai2.set_board(board)
-                is_done = board.play()
+            board = Board(i, size, ai2, ai1)
+            ai1.set_board(board)
+            ai2.set_board(board)
+            is_done = board.play()
 
         clear_games()
         ai1.eps, ai2.eps = 0, 0
-        print(f"Phase {phase} : results...")
+        print(f"Session {phase} : results...")
+        # we test the AI for 1 session
         for i in range(1, nb_tests + 1):
             board = Board(i, size, ai2, ai1)
             ai1.set_board(board)
@@ -81,7 +86,7 @@ def training_to_csv(ai1 : AI, ai2 : AI, size_board, nb_games : int, nb_tests : i
     file_path = path_builder("ai", eps, lr)
     QTableState4.export_to_csv(file_path)
 
-    print("Export as csv completed")
+    print("Export as csv completed\n\n")
 
 def training(ai1 : AI, ai2 : AI, size, nb_games : int, eps : float, lr : float):
     clear_games()
@@ -207,10 +212,8 @@ def train_ai():
     ai1 = map_AI(AIs.query.get(1))
     ai2 = map_AI(AIs.query.get(2))
 
-    # training(ai1, ai2, size, 3, 0.9, 0.9)
 
-    training_to_csv(ai1, ai2, size, 5, 50, 0.9, 0.9)
-
+    training_to_csv(ai1, ai2, size, 10, 10, 20, 0.9, 0.08, 0.9)
     return {"id_done" : True}
 
 @app.route('/infos/')
@@ -243,4 +246,10 @@ def properties_reboot():
 def properties_delete():
     """ Delete the AI """
     QTableState4.delete_all()
+    return render_template('properties.html')
+
+@app.route('/properties/import/')
+def properties_import():
+    """ Import the AI """
+    QTableState4.import_from_csv("data/ai/ais_eps90.0_lr90.0.csv")
     return render_template('properties.html')
