@@ -13,7 +13,7 @@ app.config.from_object('config')
 boards = {}
 size = 4
 
-path_builder = lambda folder, eps, lr: f"data/{folder}/ais_eps{eps*100}_lr{lr*100}.csv"
+path_builder = lambda folder, eps, lr: f"data/{folder}/ais_dr{eps*100}_lr{lr*100}.csv"
 """
 Function Name: path_builder
 
@@ -37,7 +37,7 @@ clear_games = lambda: (
 )
 
 
-def training_to_csv(ai1 : AI, ai2 : AI, size_board, nb_games : int, sessions : int, nb_tests : int, eps : float, eps_dec : float, lr : float):
+def training_decr_to_csv(ai1 : AI, ai2 : AI, size_board, nb_games : int, sessions : int, nb_tests : int, eps : float, eps_dec : float, lr : float, dr, file_name):
     """
     """
     df = pd.DataFrame(columns=["winner", "p1_squares", "p2_squares", "turns"])
@@ -46,18 +46,20 @@ def training_to_csv(ai1 : AI, ai2 : AI, size_board, nb_games : int, sessions : i
     clear_games()
 
     ai1.learning_rate, ai2.learning_rate = lr, lr
-    nb_games = (nb_games / sessions) * 1000
+    ai1.discount_rate, ai2.discount_rate = dr, dr
+    nb_games = int((nb_games / sessions) * 1000)
     eps = eps + eps_dec
 
-    print(f"Training started - eps {eps} & lr {lr}")
+    print(f"Training started - eps {eps - eps_dec} & lr {lr}")
     # we train the AI for all the sessions
     for phase in range(1, sessions + 1):
         # we decrease epsilon each session
-        eps = eps - eps_dec if eps > 0 else 0
+        eps = eps - eps_dec if eps - eps_dec > 2 else 2
         ai1.eps, ai2.eps = eps, eps
     
         # we train the AI for 1 session
         print(f"Session {phase} : training...")
+        clear_games()
         for i in range(1, nb_games + 1):
             board = Board(i, size, ai2, ai1)
             ai1.set_board(board)
@@ -65,7 +67,8 @@ def training_to_csv(ai1 : AI, ai2 : AI, size_board, nb_games : int, sessions : i
             is_done = board.play()
 
         clear_games()
-        ai1.eps, ai2.eps = 0, 0
+        df.loc[len(df)] = ["Eps :", ai1.eps, "Nb_games : ", sessions]
+        ai1.eps, ai2.eps = 1, 0
         print(f"Session {phase} : results...")
         # we test the AI for 1 session
         for i in range(1, nb_tests + 1):
@@ -80,10 +83,159 @@ def training_to_csv(ai1 : AI, ai2 : AI, size_board, nb_games : int, sessions : i
         
     print(f"Training done - eps {eps} & lr {lr}")
 
-    file_path = path_builder("trains", eps, lr)
+    #file_path = path_builder("trains", dr, lr)
+    file_path = f"data/trains/{file_name}.csv"
     df.to_csv(file_path, index=False)
 
-    file_path = path_builder("ai", eps, lr)
+    #file_path = path_builder("ai", dr, lr)
+    file_path = f"data/ai/{file_name}.csv"
+    QTableState4.export_to_csv(file_path)
+
+    print("Export as csv completed\n\n")
+
+def training_to_csv(ai1 : AI, ai2 : AI, size_board, nb_games : int, sessions : int, nb_tests : int, eps : float, lr : float, dr, file_name):
+    """
+    """
+    df = pd.DataFrame(columns=["winner", "p1_squares", "p2_squares", "turns"])
+
+    QTableState4.delete_all()
+    clear_games()
+
+    ai1.learning_rate, ai2.learning_rate = lr, lr
+    ai1.discount_rate, ai2.discount_rate = dr, dr
+    nb_games = int((nb_games / sessions) * 1000)
+
+    print(f"Training started - eps {eps} & lr {lr}")
+    # we train the AI for all the sessions
+    for phase in range(1, sessions + 1):
+        # we decrease epsilon each session
+        ai1.eps, ai2.eps = eps, eps
+    
+        # we train the AI for 1 session
+        print(f"Session {phase} : training...")
+        clear_games()
+        for i in range(1, nb_games + 1):
+            board = Board(i, size, ai2, ai1)
+            ai1.set_board(board)
+            ai2.set_board(board)
+            is_done = board.play()
+
+        clear_games()
+        df.loc[len(df)] = ["Eps :", ai1.eps, "Nb_games : ", sessions]
+        ai1.eps, ai2.eps = 1, 0
+        print(f"Session {phase} : results...")
+        # we test the AI for 1 session
+        for i in range(1, nb_tests + 1):
+            board = Board(i, size, ai2, ai1)
+            ai1.set_board(board)
+            ai2.set_board(board)
+            is_done = board.play()
+
+            p1_squares, p2_squares = board.count_squares()
+            winner = "p1" if p1_squares > p2_squares else "p2"
+            df.loc[len(df)] = [winner, p1_squares, p2_squares, board.nb_turn]
+        
+    print(f"Training done - eps {eps} & lr {lr}")
+
+    #file_path = path_builder("trains", dr, lr)
+    file_path = f"data/trains/{file_name}.csv"
+    df.to_csv(file_path, index=False)
+
+    #file_path = path_builder("ai", dr, lr)
+    file_path = f"data/ai/{file_name}.csv"
+    QTableState4.export_to_csv(file_path)
+
+    print("Export as csv completed\n\n")
+
+def training_aur(ai1 : AI, ai2 : AI, size_board, nb_tests : int, eps : float, lr : float, dr, file_name):
+    """
+    """
+    df = pd.DataFrame(columns=["winner", "p1_squares", "p2_squares", "turns"])
+
+    QTableState4.delete_all()
+    clear_games()
+
+    ai1.learning_rate, ai2.learning_rate = lr, lr
+    ai1.discount_rate, ai2.discount_rate = dr, dr
+    ai1.eps, ai2.eps = eps, eps
+
+    print(f"Training started - eps {eps} & lr {lr}")
+    for i in range(1, 10001):
+        board = Board(i, size, ai2, ai1)
+        ai1.set_board(board)
+        ai2.set_board(board)
+        is_done = board.play()
+
+    df.loc[len(df)] = ["Eps :", ai1.eps, "Nb_games : ", ""]
+    ai1.eps, ai2.eps = 1, 0
+    print(f"Results...")
+    # we test the AI for 1 session
+    for i in range(1, nb_tests + 1):
+        board = Board(i, size, ai2, ai1)
+        ai1.set_board(board)
+        ai2.set_board(board)
+        is_done = board.play()
+
+        p1_squares, p2_squares = board.count_squares()
+        winner = "p1" if p1_squares > p2_squares else "p2"
+        df.loc[len(df)] = [winner, p1_squares, p2_squares, board.nb_turn]
+
+        
+    clear_games()
+    ai1.eps, ai2.eps = 0.5, 0.5
+
+    print(f"Training started - eps {eps} & lr {lr}")
+    for i in range(1, 20001):
+        board = Board(i, size, ai2, ai1)
+        ai1.set_board(board)
+        ai2.set_board(board)
+        is_done = board.play()
+
+    df.loc[len(df)] = ["Eps :", ai1.eps, "Nb_games : ", ""]
+    ai1.eps, ai2.eps = 1, 0
+    print(f"Results...")
+    # we test the AI for 1 session
+    for i in range(1, nb_tests + 1):
+        board = Board(i, size, ai2, ai1)
+        ai1.set_board(board)
+        ai2.set_board(board)
+        is_done = board.play()
+
+        p1_squares, p2_squares = board.count_squares()
+        winner = "p1" if p1_squares > p2_squares else "p2"
+        df.loc[len(df)] = [winner, p1_squares, p2_squares, board.nb_turn]
+
+
+    clear_games()
+    ai1.eps, ai2.eps = 0.3, 0.3
+
+    print(f"Training started - eps {eps} & lr {lr}")
+    for i in range(1, 10001):
+        board = Board(i, size, ai2, ai1)
+        ai1.set_board(board)
+        ai2.set_board(board)
+        is_done = board.play()
+
+    df.loc[len(df)] = ["Eps :", ai1.eps, "Nb_games : ", ""]
+    ai1.eps, ai2.eps = 1, 0
+    print(f"Results...")
+    # we test the AI for 1 session
+    for i in range(1, nb_tests + 1):
+        board = Board(i, size, ai2, ai1)
+        ai1.set_board(board)
+        ai2.set_board(board)
+        is_done = board.play()
+
+        p1_squares, p2_squares = board.count_squares()
+        winner = "p1" if p1_squares > p2_squares else "p2"
+        df.loc[len(df)] = [winner, p1_squares, p2_squares, board.nb_turn]
+
+    print(f"Training done - eps {eps} & lr {lr}")
+
+    file_path = f"data/trains/{file_name}.csv"
+    df.to_csv(file_path, index=False)
+
+    file_path = f"data/ai/{file_name}.csv"
     QTableState4.export_to_csv(file_path)
 
     print("Export as csv completed\n\n")
@@ -108,6 +260,8 @@ def training(ai1 : AI, ai2 : AI, size, nb_games : int, eps : float, lr : float):
 def index():
 
     """ Render the homepage template on the / route """
+    clear_games()
+    print(QTableState4.query.count())
     return render_template('index.html', size = size)
 
 @app.route('/game/')
@@ -199,6 +353,8 @@ def move():
 
 
 
+
+
 @app.route('/train/')
 def train():
     """ Render the train template on the /train route"""
@@ -211,9 +367,53 @@ def train_ai():
 
     ai1 = map_AI(AIs.query.get(1))
     ai2 = map_AI(AIs.query.get(2))
+        # training(ai1, ai2, size, 3, 0.9, 0.9)
+    # CRASH
+    # training_to_csv(ai1, ai2, size, 5, 5, 0.5, 0.7)
+    # training_to_csv(ai1, ai2, size, 5, 5, 0.7, 0.5)
+    # training_to_csv(ai1, ai2, size, 5, 5, 0.8, 0.9)
+    # training_to_csv(ai1, ai2, size, 10, 5, 0.8, 0.9) # x 2
+
+    #training_decr_to_csv(ai1, ai2, size, 32, 8, 20, 0.9, 0.1, 0.4, 0.9)
+    #training_decr_to_csv(ai1, ai2, size, 32, 8, 20, 0.9, 0.1, 0.5, 0.9)
+    #training_decr_to_csv(ai1, ai2, size, 32, 8, 20, 0.9, 0.1, 0.6, 0.9)
+    #training_decr_to_csv(ai1, ai2, size, 32, 8, 20, 0.9, 0.1, 0.4, 1)
+    #training_decr_to_csv(ai1, ai2, size, 32, 8, 20, 0.9, 0.1, 0.5, 1)
+    #training_decr_to_csv(ai1, ai2, size, 32, 8, 20, 0.9, 0.1, 0.6, 1)
+    #training_to_csv(ai1, ai2, size, 32, 8, 20, 0.9, 0.9, 0.9)
+    #training_to_csv(ai1, ai2, size, 32, 8, 20, 0.9, 0.7, 0.9)
 
 
-    training_to_csv(ai1, ai2, size, 10, 10, 20, 0.9, 0.08, 0.9)
+    # training_decr_to_csv(ai1, ai2, size, 40, 10, 20, 0.9, 0.1, 0.5, 0.9, "9_5_40games_decr10")
+    # training_decr_to_csv(ai1, ai2, size, 40, 10, 20, 0.9, 0.1, 0.7, 0.9, "9_7_40games_decr10")
+    
+    # training_decr_to_csv(ai1, ai2, size, 80, 10, 20, 0.9, 0.1, 0.7, 0.9, "9_7_80games_decr10")
+    # training_aur(ai1, ai2, size, 20, 0.8, 0.3, 0.6, "9_5_aur20games")
+    
+    #training_to_csv(ai1, ai2, size, 50, 100, 20, 0.9, 0.7, 0.9, "9_7_50games")
+    #training_to_csv(ai1, ai2, size, 50, 100, 20, 0.5, 0.5, 0.9, "5_5_50games")
+    #training_to_csv(ai1, ai2, size, 50, 100, 20, 0.9, 0.5, 0.9, "9_5_50games")
+
+    #training_decr_to_csv(ai1, ai2, size, 60, 30, 20, 0.9, 0.1, 0.5, 0.9, "9_5_40games_decr10")
+    
+    # gamma 0.7 - lr 0.3 - eps 0.9 15K games
+    # gamma 0.7 - lr 0.3 - eps 0.5 15K games
+    # gamma 0.7 - lr 0.3 - eps 0.3 15K games
+    file_path = f"data/ai/TERMINATOR.csv"
+    QTableState4.export_to_csv(file_path)
+    QTableState4.delete_all()
+    clear_games()
+
+    ai1.learning_rate, ai2.learning_rate = 0.9, 0.9
+    ai1.discount_rate, ai2.discount_rate = 0.9, 0.9
+    ai1.eps, ai2.eps = 0.9, 0.9
+
+    print(f"Training started")
+    for i in range(1, 80001):
+        board = Board(i, size, ai2, ai1)
+        ai1.set_board(board)
+        ai2.set_board(board)
+        is_done = board.play()
     return {"id_done" : True}
 
 @app.route('/infos/')
@@ -251,5 +451,8 @@ def properties_delete():
 @app.route('/properties/import/')
 def properties_import():
     """ Import the AI """
-    QTableState4.import_from_csv("data/ai/ais_eps90.0_lr90.0.csv")
+    # QTableState4.import_from_csv("data/ai/ais_dr90.0_lr60.0.csv")
+    # QTableState4.import_from_csv("data/ai/ais_eps90.0_lr90.0.csv")
+    QTableState4.import_from_csv("data/ai/TERMINATOR.csv")
+    #QTableState4.import_from_csv("data/ai/Aurelien spec.csv")
     return render_template('properties.html')

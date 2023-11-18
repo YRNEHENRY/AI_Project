@@ -140,6 +140,37 @@ class QTableState5(db.Model):
 	right_score = db.Column(db.Integer, default=0)
 	up_score = db.Column(db.Integer, default=0)
 	down_score = db.Column(db.Integer, default=0)
+        
+
+@staticmethod
+def export5x5(path : str):
+# Retrieve all instances of QTableState4 from the database
+        instances = QTableState5.query.all()
+        fieldnames = ['state', 'left_score', 'right_score', 'up_score', 'down_score']
+
+        # Check if there are instances to export
+        if not instances:
+            print("ERROR : no instances to export.")
+            return
+
+        # Open CSV file in write mode
+        with open(path, 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow(fieldnames) # Write the first line with the variable names
+
+            # Write the values of each instance in a line of the CSV file
+            for instance in instances:
+                row = [
+                    instance.state,
+                    instance.left_score,
+                    instance.right_score,
+                    instance.up_score,
+                    instance.down_score
+                ]
+                writer.writerow(row)
+        
+        print(f"Export complete.")
+
 
 class QTableState6(db.Model):
     #16 chiffres pour board (6x6) + 4 chiffres pour pos joueurs + 1 chiffres (1 ou 2) pour turn
